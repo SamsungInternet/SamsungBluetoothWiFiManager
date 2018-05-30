@@ -1,0 +1,20 @@
+{
+	"background_color": "#5d9bc7",
+	"theme_color": "#5288af",
+	"name": "Setup Things",
+	"short_name": "SetupThings",
+	"display": "standalone",
+	"start_url": "/",
+	"icons": [
+		{
+			"src": "logo-192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "logo-512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	]
+}

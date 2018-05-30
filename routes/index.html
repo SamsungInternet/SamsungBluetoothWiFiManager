@@ -1,0 +1,28 @@
+<svelte:head>
+	<title>Setup Things</title>
+</svelte:head>
+
+<h1>Setup <strong>Things</strong> <img src="logo-light.svg" alt="Things logo" width="50" height="50"/></h1>
+
+<h3>To setup your Gateway and configure it to use your wi-fi network, follow these steps.</h3>
+
+<h2>Step 1</h2>
+
+<p class="instruction">Enter your wifi information.</p>
+
+<form method="POST" action="/connect">
+
+	<p>
+		<label for="wifi-name">Wi-Fi name (SSID)</label>
+		<input type="text" id="wifi-name"/>
+	</p>
+
+	<p>
+		<label for="wifi-name">Wi-Fi password</label>
+		<input type="text" id="wifi-name"/>
+	</p>
+
+	<p>
+		<input type="submit" value="Submit"/>
+	</p>
+</form>
