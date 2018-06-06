@@ -14,7 +14,7 @@
 
 	<p>
 		<label for="wifi-ssid">Wi-Fi name (SSID)</label>
-		<select id="wifi-ssid" ref="wifissid" on:change="onWifiSSIDChange()">
+		<select id="wifi-ssid" ref="wifi-ssid" on:change="onWifiSSIDChange()">
 			<option value="" selected>Select...</option>
 			{#each wifiSSIDs as wifiSSID}
 				<option value={wifiSSID}>{wifiSSID}</option>
@@ -23,7 +23,7 @@
 	</p>
 
 	<p>
-		<label for="wifi-pwd" ref="wifipwd">Wi-Fi password</label>
+		<label for="wifi-pwd" ref="wifi-pwd">Wi-Fi password</label>
 		<input type="text" id="wifi-pwd" on:change="onWifiPwdChange()"/>
 	</p>
 
