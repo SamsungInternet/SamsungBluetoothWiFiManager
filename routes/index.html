@@ -14,7 +14,7 @@
 
 	<p>
 		<label for="wifi-ssid">Wi-Fi name (SSID)</label>
-		<select id="wifi-ssid" ref="wifi-ssid" on:change="onWifiSSIDChange()">
+		<select id="wifi-ssid" ref="wifissid" on:change="onWifiSSIDChange()">
 			<option value="" selected>Select...</option>
 			{#each wifiSSIDs as wifiSSID}
 				<option value={wifiSSID}>{wifiSSID}</option>
@@ -23,16 +23,12 @@
 	</p>
 
 	<p>
-		<label for="wifi-pwd" ref="wifi-pwd">Wi-Fi password</label>
+		<label for="wifi-pwd" ref="wifipwd">Wi-Fi password</label>
 		<input type="text" id="wifi-pwd" on:change="onWifiPwdChange()"/>
 	</p>
 
 	<p>
-		{#if isValid}
-			<input id="submit" type="submit" value="Submit"/>
-		{:else}
-			<input id="submit" type="submit" value="Submit" disabled/>
-		{/if}
+		<input id="submit" type="submit" value="Submit" bind:disable="isInvalid"/>
 	</p>
 </form>
 
@@ -44,7 +40,7 @@
 						'FooBar Test 1',
 						'FooBar Test 2'
 					],
-					isValid: false
+					isInvalid: true
 				};
 			},
 			oncreate() {
@@ -57,11 +53,11 @@
 				},
 				onWifiSSIDChange() {
 					console.log('on wifi sssid change: this.refs', this.refs);
-					this.set({isValid: this.getIsValid()});
+					this.set({isInvalid: !this.getIsValid()});
 				},
 				onWifiPwdChange() {
 					console.log('on wifi pwd change: this.refs', this.refs);
-					this.set({isValid: this.getIsValid()});
+					this.set({isInvalid: !this.getIsValid()});
 				}
 			}
 		};
