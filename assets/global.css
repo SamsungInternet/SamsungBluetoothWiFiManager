@@ -94,3 +94,9 @@ a:hover {
 p.back {
 	margin-top: 2em;
 }
+
+form input[type="submit"]:disabled {
+	background-color: #aaa;
+	color: #ccc;
+	cursor: default;
+}

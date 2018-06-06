@@ -14,7 +14,7 @@
 
 	<p>
 		<label for="wifi-ssid">Wi-Fi name (SSID)</label>
-		<select id="wifi-ssid" ref="wifi-ssid" on:change="onWifiSSIDChange()">
+		<select id="wifi-ssid" ref:wifissid on:change="onWifiSSIDChange()">
 			<option value="" selected>Select...</option>
 			{#each wifiSSIDs as wifiSSID}
 				<option value={wifiSSID}>{wifiSSID}</option>
@@ -23,8 +23,8 @@
 	</p>
 
 	<p>
-		<label for="wifi-pwd" ref="wifi-pwd">Wi-Fi password</label>
-		<input type="text" id="wifi-pwd" on:change="onWifiPwdChange()"/>
+		<label for="wifi-pwd">Wi-Fi password</label>
+		<input type="text" id="wifi-pwd" ref:wifipwd on:change="onWifiPwdChange()"/>
 	</p>
 
 	<p>
@@ -52,8 +52,8 @@
 			},
 			methods: {
 				getIsValid() {
-					console.log('getIsValid: this.refs', this.refs);
-					return !!this.refs['wifi-ssid'].value && !!this.refs['wifi-pwd'].value;
+					console.log('getIsValid: this.refs', this.refs.wifipwd, this.refs.wifissid);
+					return !!this.refs.wifissid.value && !!this.refs.wifipwd.value;
 				},
 				onWifiSSIDChange() {
 					console.log('on wifi sssid change: this.refs', this.refs);
