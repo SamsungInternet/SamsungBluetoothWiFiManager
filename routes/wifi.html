@@ -1,0 +1,62 @@
+<svelte:head>
+	<title>Setup Things</title>
+</svelte:head>
+
+<h1>Setup <strong>Things</strong> <img src="logo-light.svg" alt="Things logo" width="50" height="50"/></h1>
+
+<h2>Step 2</h2>
+
+<p class="instruction">Your Wi-Fi details</p>
+
+<form method="POST" action="/connect">
+
+	<p>
+		<label for="wifi-ssid">Wi-Fi name (SSID)</label>
+		<select id="wifi-ssid" ref:wifissid on:change="onWifiSSIDChange()">
+			<option value="" selected>Select...</option>
+			{#each wifiSSIDs as wifiSSID}
+				<option value={wifiSSID}>{wifiSSID}</option>
+			{/each}
+		</select>
+	</p>
+
+	<p>
+		<label for="wifi-pwd">Wi-Fi password</label>
+		<input type="text" id="wifi-pwd" ref:wifipwd on:change="onWifiPwdChange()"/>
+	</p>
+
+	<p>
+		<input id="submit" type="submit" value="Submit" disabled={isInvalid}/>
+	</p>
+</form>
+
+<script>
+	export default {
+			data() {
+				return {
+					wifiSSIDs: [
+						'FooBar Test 1',
+						'FooBar Test 2'
+					],
+					isInvalid: true
+				};
+			},
+			oncreate() {
+				console.log('create', this.refs);
+			},
+			methods: {
+				getIsValid() {
+					console.log('getIsValid: this.refs', this.refs.wifipwd, this.refs.wifissid);
+					return !!this.refs.wifissid.value && !!this.refs.wifipwd.value;
+				},
+				onWifiSSIDChange() {
+					console.log('on wifi sssid change: this.refs', this.refs);
+					this.set({isInvalid: !this.getIsValid()});
+				},
+				onWifiPwdChange() {
+					console.log('on wifi pwd change: this.refs', this.refs);
+					this.set({isInvalid: !this.getIsValid()});
+				}
+			}
+		};
+</script>
