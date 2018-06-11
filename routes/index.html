@@ -17,6 +17,8 @@
 	<p>Please use an alternative setup method or try again in a 
 		<a href="https://caniuse.com/#feat=web-bluetooth">supporting browser</a> (such as Samsung Internet, Chrome or Opera).</p>
 
+	<button id="connect" on:click="onClickConnect()">TEMPORARY!</button>
+
 {:elseif supported}
 	<h3>To setup your Gateway and configure it to use your wi-fi network, follow these steps.</h3>
 
@@ -46,17 +48,27 @@
 		methods: {
 			async onClickConnect() {
 				// TODO replace battery_service (using temporarily for testing)
-				const device = await navigator.bluetooth.requestDevice({
-						filters: [{
-							services: ['battery_service']
-						}]
-					});
-				const server = await device.gatt.connect();
-				const service = await server.getPrimaryService('battery_service');
-				const characteristic = await service.getCharacteristic('battery_level');
-				const value = await characteristic.readValue();		
+				// const device = await navigator.bluetooth.requestDevice({
+				// 		filters: [{
+				// 			services: ['battery_service']
+				// 		}]
+				// 	});
+				// const server = await device.gatt.connect();
+				// const service = await server.getPrimaryService('battery_service');
+				// const characteristic = await service.getCharacteristic('battery_level');
+				// const value = await characteristic.readValue();		
 
-				alert('Battery level is ' + value.getUint8(0));
+				// alert('Battery level is ' + value.getUint8(0));
+
+				// TEST seeing if we can set data we received via Bluetooth (i.e. wifi SSIDs)
+				// and pull that out again in the next page...?
+				console.log('Store', this.store);
+				
+				this.store.set({wifiSSIDs: ['foo', 'bar', 'baz', 'lurman']});
+
+				// TODO how to do client-side routing to switch to the next page?
+				//app.route('/wifi');
+
 			}
 		}
 	};

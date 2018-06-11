@@ -34,10 +34,7 @@
 	export default {
 			data() {
 				return {
-					wifiSSIDs: [
-						'FooBar Test 1',
-						'FooBar Test 2'
-					],
+					wifiSSIDs: this.store.get('wifiSSIDs'),
 					isInvalid: true
 				};
 			},
