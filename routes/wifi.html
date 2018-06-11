@@ -41,6 +41,10 @@
 			},
 			oncreate() {
 				console.log('create', this.refs);
+				this.store.on('state', ({ current }) => {
+					console.log('HELLO? on state... what does this mean?', current);
+				});
+				console.log('this.store', this.store);
 			},
 			methods: {
 				getIsValid() {

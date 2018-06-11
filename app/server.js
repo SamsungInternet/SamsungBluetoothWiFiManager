@@ -15,7 +15,8 @@ polka() // You can also use Express
 			App,
 			store: request => {
 				return new Store({
-					version: 1
+					version: 1,
+					wifiSSIDs: []
 				});
 			}
 		})

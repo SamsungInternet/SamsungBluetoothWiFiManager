@@ -9,6 +9,9 @@ init({
 	App,
 	store: data => {
 		// `data` is whatever was in the server-side store
-		return new Store(data);
+		const store = new Store(data);
+		// Useful for debugging
+		window.store = store;
+		return store;
 	}
 });
