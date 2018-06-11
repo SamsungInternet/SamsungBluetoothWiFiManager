@@ -1,64 +1,63 @@
 <svelte:head>
-	<title>Setup Things</title>
+	<title>Connect</title>
 </svelte:head>
+
+<style>
+	#connect {
+		width: 100%;
+	}
+</style>
 
 <h1>Setup <strong>Things</strong> <img src="logo-light.svg" alt="Things logo" width="50" height="50"/></h1>
 
-<h3>To setup your Gateway and configure it to use your wi-fi network, follow these steps.</h3>
+{#if supported == false}
+	<h2>Sorry</h2>
 
-<h2>Step 1</h2>
+	<p>This service requires Web Bluetooth, which your browser does not support.</p>
+	<p>Please use an alternative setup method or try again in a 
+		<a href="https://caniuse.com/#feat=web-bluetooth">supporting browser</a> (such as Samsung Internet, Chrome or Opera).</p>
 
-<p class="instruction">Your Wi-Fi details</p>
+{:elseif supported}
+	<h3>To setup your Gateway and configure it to use your wi-fi network, follow these steps.</h3>
 
-<form method="POST" action="/connect">
+	<h2>Step 1</h2>
 
-	<p>
-		<label for="wifi-ssid">Wi-Fi name (SSID)</label>
-		<select id="wifi-ssid" ref:wifissid on:change="onWifiSSIDChange()">
-			<option value="" selected>Select...</option>
-			{#each wifiSSIDs as wifiSSID}
-				<option value={wifiSSID}>{wifiSSID}</option>
-			{/each}
-		</select>
-	</p>
+	<p>Check your gateway is switched on and press the button to connect.</p>
+	<button id="connect" on:click="onClickConnect()">Connect</button>		
+{/if}
 
-	<p>
-		<label for="wifi-pwd">Wi-Fi password</label>
-		<input type="text" id="wifi-pwd" ref:wifipwd on:change="onWifiPwdChange()"/>
-	</p>
-
-	<p>
-		<input id="submit" type="submit" value="Submit" disabled={isInvalid}/>
-	</p>
-</form>
+<p class="back"><a href="/">Back to previous page</a></p>
 
 <script>
+
 	export default {
-			data() {
-				return {
-					wifiSSIDs: [
-						'FooBar Test 1',
-						'FooBar Test 2'
-					],
-					isInvalid: true
-				};
-			},
-			oncreate() {
-				console.log('create', this.refs);
-			},
-			methods: {
-				getIsValid() {
-					console.log('getIsValid: this.refs', this.refs.wifipwd, this.refs.wifissid);
-					return !!this.refs.wifissid.value && !!this.refs.wifipwd.value;
-				},
-				onWifiSSIDChange() {
-					console.log('on wifi sssid change: this.refs', this.refs);
-					this.set({isInvalid: !this.getIsValid()});
-				},
-				onWifiPwdChange() {
-					console.log('on wifi pwd change: this.refs', this.refs);
-					this.set({isInvalid: !this.getIsValid()});
-				}
+		data() {
+			return {
+				supported: null
 			}
-		};
+		},
+		oncreate() {
+			if (navigator.bluetooth && navigator.bluetooth.requestDevice) {
+				this.set({supported: true});
+			} else {
+				this.set({supported: false});
+			}
+		},
+		methods: {
+			async onClickConnect() {
+				// TODO replace battery_service (using temporarily for testing)
+				const device = await navigator.bluetooth.requestDevice({
+						filters: [{
+							services: ['battery_service']
+						}]
+					});
+				const server = await device.gatt.connect();
+				const service = await server.getPrimaryService('battery_service');
+				const characteristic = await service.getCharacteristic('battery_level');
+				const value = await characteristic.readValue();		
+
+				alert('Battery level is ' + value.getUint8(0));
+			}
+		}
+	};
 </script>
