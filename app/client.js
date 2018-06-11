@@ -1,5 +1,5 @@
 import { init } from 'sapper/runtime.js';
-import { Store } from 'svelte/store.js';
+import { Store } from './store.js';
 import { routes } from './manifest/client.js';
 import App from './App.html';
 

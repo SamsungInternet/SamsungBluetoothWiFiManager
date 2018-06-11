@@ -83,11 +83,12 @@
 			  const that = this;
 
 				setTimeout(() => {
-
 					console.log( that.store.get('wifiSSIDs') );
-
-					location.href = '/wifi';
 				}, 1);
+
+				setTimeout(() => {
+					location.href = '/wifi';
+				}, 5000);
 
 			}
 		}

@@ -2,7 +2,7 @@ import polka from 'polka';
 import compression from 'compression';
 import sapper from 'sapper';
 import serve from 'serve-static';
-import { Store } from 'svelte/store.js';
+import { Store } from './store.js';
 import { routes } from './manifest/server.js';
 import App from './App.html';
 
@@ -14,9 +14,12 @@ polka() // You can also use Express
 			routes,
 			App,
 			store: request => {
+
+				console.log('request', request);
+
 				return new Store({
 					version: 1,
-					wifiSSIDs: []
+					wifiSSIDs: request.session && request.session.wifiSSIDs ? request.session.wifiSSIDs : []
 				});
 			}
 		})
