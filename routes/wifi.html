@@ -14,7 +14,7 @@
 		<label for="wifi-ssid">Wi-Fi name (SSID)</label>
 		<select id="wifi-ssid" ref:wifissid on:change="onWifiSSIDChange()">
 			<option value="" selected>Select...</option>
-			{#each wifiSSIDs as wifiSSID}
+			{#each $wifiSSIDs as wifiSSID}
 				<option value={wifiSSID}>{wifiSSID}</option>
 			{/each}
 		</select>
@@ -34,7 +34,8 @@
 	export default {
 			data() {
 				return {
-					wifiSSIDs: this.store.get('wifiSSIDs'),
+					//wifiSSIDs: this.store.get('wifiSSIDs'),
+					//wifiSSIDs: ['foo', 'bar'],
 					isInvalid: true
 				};
 			},

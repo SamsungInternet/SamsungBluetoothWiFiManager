@@ -17,8 +17,6 @@
 	<p>Please use an alternative setup method or try again in a 
 		<a href="https://caniuse.com/#feat=web-bluetooth">supporting browser</a> (such as Samsung Internet, Chrome or Opera).</p>
 
-	<button id="connect" on:click="onClickConnect()">TEMPORARY!</button>
-
 {:elseif supported}
 	<h3>To setup your Gateway and configure it to use your wi-fi network, follow these steps.</h3>
 
@@ -31,6 +29,12 @@
 <p class="back"><a href="/">Back to previous page</a></p>
 
 <script>
+
+	const WIFI_SETUP_SERVICE_UUID = '00010000-89bd-43c8-9231-40f6e305f96d';
+	const WIFI_SSID_UUID = '00010001-89bd-43c8-9231-40f6e305f96d'; // Currently set SSID
+	const WIFI_PASSWORD_UUID = '00010002-89bd-43c8-9231-40f6e305f96d';
+	const WIFI_SECURITY_UUID = '00010003-89bd-43c8-9231-40f6e305f96d';
+	const WIFI_SIDDS_LIST_UUID = '00010004-89bd-43c8-9231-40f6e305f96d';
 
 	export default {
 		data() {
@@ -48,26 +52,29 @@
 		methods: {
 			async onClickConnect() {
 				// TODO replace battery_service (using temporarily for testing)
-				// const device = await navigator.bluetooth.requestDevice({
-				// 		filters: [{
-				// 			services: ['battery_service']
-				// 		}]
-				// 	});
-				// const server = await device.gatt.connect();
-				// const service = await server.getPrimaryService('battery_service');
-				// const characteristic = await service.getCharacteristic('battery_level');
-				// const value = await characteristic.readValue();		
+				const device = await navigator.bluetooth.requestDevice({
+						filters: [{
+							name: ['IoT Gateway WiFi Setup']
+						}],
+						optionalServices: [WIFI_SETUP_SERVICE_UUID]
+					});
+				const server = await device.gatt.connect();
+				const service = await server.getPrimaryService(WIFI_SETUP_SERVICE_UUID);
+				const characteristic = await service.getCharacteristic(WIFI_SIDDS_LIST_UUID);
+				const value = await characteristic.readValue();		
 
-				// alert('Battery level is ' + value.getUint8(0));
+				alert('Wifi SSIDs value: ' + value);
 
 				// TEST seeing if we can set data we received via Bluetooth (i.e. wifi SSIDs)
 				// and pull that out again in the next page...?
-				console.log('Store', this.store);
+				//console.log('Store', this.store);
 				
-				this.store.set({wifiSSIDs: ['foo', 'bar', 'baz', 'lurman']});
+				//this.store.set({wifiSSIDs: ['foo', 'bar', 'baz', 'lurman']});
 
 				// TODO how to do client-side routing to switch to the next page?
 				//app.route('/wifi');
+				// TEMP
+				//location.href = '/wifi';
 
 			}
 		}
