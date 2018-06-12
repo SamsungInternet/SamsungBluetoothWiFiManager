@@ -36,18 +36,17 @@ util.inherits(WiFiSecurityCharacteristic, BlenoCharacteristic);
 WiFiSecurityCharacteristic.prototype.onReadRequest = function(offset, callback) {
   var result = this.RESULT_SUCCESS;
 
-  console.log('WiFi Encryption Characteristic - onReadRequest: value = ' + this._value);
-  console.log('offset is : ' + offset);
-  //var data = new Buffer('0123456789 1123456789 2123456789 3123456789 4123456789 5123456789 6123456789 7123456789 81234567890 9123456789 0123456789', 'utf-8');
-  //var data = new Buffer('["NONE","WEP 128b ASCii","WEP 128b Pasephrase","LEAP","WEP","WPA2 Personal","WPA2 Enterprise"]', 'utf-8');
+  //console.log('offset is : ' + offset);
+  // Take our objects local variable _value and pass into a buffer to be used by the bluetooth stack. _value should be our list of encryption types for wifi
   var data = new Buffer(this._value, 'utf-8');
+  // currently the bluetooth stack ingests about 22 octets at a time. if we have not ingested all our octets we should return success and take 22 away from
+  // the start of our buffer. The 'offset' value is the amount of octets we have already sent.
   if (offset > data.length) {
     result = this.RESULT_INVALID_OFFSET;
   } else {
     data = data.slice(offset);
   }
-
-  callback(result, data);
+  callback(result, data);           // this calls the dynamic function 'callback' passed into our onReadRequest which will send our buffer over the wire.
 };
 
 
