@@ -13,6 +13,7 @@ var BlenoPrimaryService = bleno.PrimaryService;
 var WifiSIDDCharacteristic = require('./wifi-ssid-characteristic');
 var WiFiPasswordCharacteristic = require('./wifi-password-characteristic');
 var WiFiSecurityCharacteristic = require('./wifi-security-characteristic');
+var NetworkCharacteristic = require('./wifi-networks-characteristic');
 
 console.log('bleno - Bluetooth WiFi Manager');
 var ssid = wifi.wifiService.getSSID();
@@ -38,7 +39,8 @@ bleno.on('advertisingStart', function(error) {
         characteristics: [
           new WifiSIDDCharacteristic(),
           new WiFiPasswordCharacteristic(),
-          new WiFiSecurityCharacteristic()
+          new WiFiSecurityCharacteristic(),
+          new NetworkCharacteristic()
         ]
       })
     ]);

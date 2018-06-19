@@ -15,7 +15,7 @@ const constants = require('./constants');
 
 var NetworkCharacteristic = function() {
   NetworkCharacteristic.super_.call(this, {
-    uuid: constants.WIFI_SETUP_SERVICE_UUID,
+    uuid: constants.WIFI_SIDDS_LIST_UUID,
     properties: ['read', 'write', 'notify'],
     descriptors: [
       new bleno.Descriptor({

@@ -8,25 +8,30 @@ const config = require('config');
 const wifiService = new WiFiServiceDiscovery();
 
 function WiFiServiceDiscovery () {
+  this.status = 'inactive';
 
 
-  piWifi.status('wlan0', function(err, status) {
-    if (err) {
-      this.wifiSSID = config.get('defaultWiFi.activeSSID');
-      this.ip = config.get('defaultWiFi.ip');
-      this.mac = config.get('defaultWiFi.mac');
-      this.securitCharacteristic = config.get('defaultWiFi.securityCharacteristic');
+  try {
+    piWifi.status('wlan0', function (err, status) {
+      console.log('init complete: ' + status.ssid);
 
-      return console.error(err.message);
-    }
-    console.log('init complete: ' + status.ssid);
+      this.wifiSSID = status.ssid;
+      this.securitCharacteristic = status.key_mgmt;
+      this.ip = status.ip;
+      this.mac = status.mac;
+      this.status = 'active';
+    });
+  } catch (err) {
+    // If we can't get status back we can't do anything. Return a 'status' of incomplete and the error message
+    this.wifiSSID = config.get('defaultWiFi.activeSSID');
+    this.ip = config.get('defaultWiFi.ip');
+    this.mac = config.get('defaultWiFi.mac');
+    this.securitCharacteristic = config.get('defaultWiFi.securityCharacteristic');
+    this.status = 'inactive';
+    console.error(err.message);
 
-    this.wifiSSID = status.ssid;
-    this.securitCharacteristic = status.key_mgmt;
-    this.ip = status.ip;
-    this.mac = status.mac;
-
-  });
+    return this.status, err;
+  }
 
 
 }
