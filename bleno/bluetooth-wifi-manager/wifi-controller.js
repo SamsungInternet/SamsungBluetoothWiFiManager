@@ -3,6 +3,42 @@
  */
 
 var piWifi = require('pi-wifi');
+const config = require('config');
+
+const wifiService = new WiFiServiceDiscovery();
+
+function WiFiServiceDiscovery () {
+
+
+  piWifi.status('wlan0', function(err, status) {
+    if (err) {
+      this.wifiSSID = config.get('defaultWiFi.activeSSID');
+      this.ip = config.get('defaultWiFi.ip');
+      this.mac = config.get('defaultWiFi.mac');
+      this.securitCharacteristic = config.get('defaultWiFi.securityCharacteristic');
+
+      return console.error(err.message);
+    }
+    console.log('init complete: ' + status.ssid);
+
+    this.wifiSSID = status.ssid;
+    this.securitCharacteristic = status.key_mgmt;
+    this.ip = status.ip;
+    this.mac = status.mac;
+
+  });
+
+
+}
+
+WiFiServiceDiscovery.prototype.getSSID = function(){
+  // Return the SSID that is currently set
+  console.log(`Getting default SSID: ${this.wifiSSID}`);
+  return this.wifiSSID;
+
+};
+
+wifiService.getSSID();
 
 var networkDetails = {
   ssid: 'MyNetwork',
@@ -16,6 +52,7 @@ piWifi.listNetworks(function(err, networksArray) {
   if (err) {
     return console.error(err.message);
   }
+  console.log('*** List networks:')
   console.log(networksArray);
 });
 
@@ -31,6 +68,7 @@ piWifi.scan(function(err, networks) {
   if (err) {
     return console.error(err.message);
   }
+  console.log('*** Scan WiFi networks:');
   console.log(networks);
 });
 
@@ -62,12 +100,13 @@ piWifi.scan(function(err, networks) {
 
 
 
-piWifi.status('wlan0', function(err, status) {
-  if (err) {
-    return console.error(err.message);
-  }
-  console.log(status);
-});
+// piWifi.status('wlan0', function(err, status) {
+//   if (err) {
+//     return console.error(err.message);
+//   }
+//   console.log('*** Status of WiFi Network:');
+//   console.log(status.ssid);
+// });
 
 // =>
 //{
@@ -85,3 +124,10 @@ piWifi.status('wlan0', function(err, status) {
 //  uuid: 'e1cda789-8c88-53e8-ffff-31c304580c22',
 //  id: 0
 //}
+
+
+
+
+module.exports = {
+  wifiService: wifiService,
+};

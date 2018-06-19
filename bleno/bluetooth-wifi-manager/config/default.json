@@ -1,0 +1,36 @@
+/**
+ * Created by nherriot on 14/06/18.
+ *
+ * This defines the default attributes used in the application. It is also read in by the application and written to.
+ *
+ */
+
+
+{
+  // Customer module configs
+  "Customer": {
+    "dbConfig": {
+      "host": "localhost",
+      "port": 5984,
+      "dbName": "customers"
+    },
+    "credit": {
+      "initialLimit": 100,
+      // Set low for development
+      "initialDays": 1
+    }
+  },
+
+  "defaultWiFi": {
+    "ssidList": "ssid",
+    "enabled": false,
+    "activeSSID": "none",
+    "activeUser": "",
+    "ip": "127.0.0.1",
+    "mac": "unknown",
+    "securityCharacteristic": "none",
+    "securityList": [ "NONE", "WEP 128b ASCii", "WEP 128b Pasephrase", "LEAP", "WEP", "WPA2 Personal", "WPA2 Enterprise" ]
+  }
+
+}
+

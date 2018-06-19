@@ -1,0 +1,21 @@
+{
+  "name": "bluetooth-wifi-manager",
+  "version": "1.0.0",
+  "description": "A bluetooth wifi manager for embedded devices.",
+  "main": "app.js",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "bleno": "^0.5.0",
+    "config": "^1.30.0",
+    "node-wifi": "^2.0.4",
+    "pi-wifi": "^1.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

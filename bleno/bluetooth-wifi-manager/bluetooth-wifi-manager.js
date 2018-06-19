@@ -4,6 +4,7 @@
 
 const bleno = require("bleno");
 const constants = require('./constants');
+const wifi = require('./wifi-controller');
 
 console.log(`Wifi encryption values are: ${constants.WiFiEncryptionValues.security}`);
 
@@ -14,6 +15,8 @@ var WiFiPasswordCharacteristic = require('./wifi-password-characteristic');
 var WiFiSecurityCharacteristic = require('./wifi-security-characteristic');
 
 console.log('bleno - Bluetooth WiFi Manager');
+var ssid = wifi.wifiService.getSSID();
+console.log(`wifi siid is: ${ssid}`);
 
 bleno.on('stateChange', function(state) {
   console.log('on -> stateChange: ' + state);
