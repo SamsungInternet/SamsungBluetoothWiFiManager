@@ -17,8 +17,6 @@
 	<p>Please use an alternative setup method or try again in a 
 		<a href="https://caniuse.com/#feat=web-bluetooth">supporting browser</a> (such as Samsung Internet, Chrome or Opera).</p>
 
-	<button id="connect" on:click="onClickConnect()">TEMPORARY</button>
-
 {:elseif supported}
 	<h3>To setup your Gateway and configure it to use your wi-fi network, follow these steps.</h3>
 
@@ -26,9 +24,8 @@
 
 	<p>Check your gateway is switched on and press the button to connect.</p>
 	<button id="connect" on:click="onClickConnect()">Connect</button>
-{/if}
 
-<p class="back"><a href="/">Back to previous page</a></p>
+{/if}
 
 <script>
 
