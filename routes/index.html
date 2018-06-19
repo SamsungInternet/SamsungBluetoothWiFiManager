@@ -51,22 +51,43 @@
 		methods: {
 			async onClickConnect() {
 				// TODO replace battery_service (using temporarily for testing)
-				// const device = await navigator.bluetooth.requestDevice({
-				// 		filters: [{
-				// 			name: ['IoT Gateway WiFi Setup']
-				// 		}],
-				// 		optionalServices: [WIFI_SETUP_SERVICE_UUID]
-				// 	});
-				// const server = await device.gatt.connect();
-				// const service = await server.getPrimaryService(WIFI_SETUP_SERVICE_UUID);
-				// const characteristic = await service.getCharacteristic(WIFI_SIDDS_LIST_UUID);
-				// const value = await characteristic.readValue();		
+				const device = await navigator.bluetooth.requestDevice({
+						filters: [{
+							name: ['IoT Gateway WiFi Setup']
+						}],
+						optionalServices: [WIFI_SETUP_SERVICE_UUID]
+					});
 
-				// alert('Wifi SSIDs value: ' + value);
+				console.log('device', device);
+
+				const server = await device.gatt.connect();
+
+				console.log('server', server);
+
+				const service = await server.getPrimaryService(WIFI_SETUP_SERVICE_UUID);
+
+				console.log('service', service);
+
+				const characteristic = await service.getCharacteristic(WIFI_SIDDS_LIST_UUID);
+
+				console.log('characteristic', characteristic);
+
+				const value = await characteristic.readValue();		
+
+				console.log('Wifi SSIDs value...', value);
+
+				//alert('Wifi SSIDs value: ' + value);
+
+				const array = new Uint8Array(value);
+
+				console.log('array ', array, array.length, array.byteLength);
+
+				for (let i=0; i < array.byteLength; i++) {
+					console.log(i + ' : ' + array[i]);
+				}
 
 				// TEST seeing if we can set data we received via Bluetooth (i.e. wifi SSIDs)
 				// and pull that out again in the next page...?
-				//console.log('Store', this.store);
 				
 				this.store.set({wifiSSIDs: ['foo', 'bar', 'baz', 'lurman']});
 					// .then(() => {
@@ -75,17 +96,6 @@
 				
 				// TODO how to do client-side routing to switch to the next page?
 				//app.route('/wifi');
-				// TEMP
-
-			  const that = this;
-
-				setTimeout(() => {
-					console.log( that.store.get('wifiSSIDs') );
-				}, 1);
-
-				setTimeout(() => {
-					location.href = '/wifi';
-				}, 5000);
 
 			}
 		}

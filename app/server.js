@@ -14,9 +14,6 @@ polka() // You can also use Express
 			routes,
 			App,
 			store: request => {
-
-				console.log('request', request);
-
 				return new Store({
 					version: 1,
 					wifiSSIDs: request.session && request.session.wifiSSIDs ? request.session.wifiSSIDs : []
