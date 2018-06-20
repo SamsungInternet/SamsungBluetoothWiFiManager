@@ -7,33 +7,78 @@ const config = require('config');
 
 const wifiService = new WiFiServiceDiscovery();
 
+
+// First create a promise which will wait some time before returning.
+// Here we add a delay by using the setTimeout function. Our Promise gets
+// resolved after 2 seconds and is loged out to the screen at line 41.
+// But what happens if we want to have one thing depend on the other ?
+function doubleAfter2Seconds(x) {
+  return new Promise(resolve => {
+    setTimeout(() => {resolve("complete");}, x*1000);
+  });
+}
+
+// This wraps the piWifi status method in a promise to allow it to be used with an async/await call
+function getpiWifiStatus() {
+  return new Promise( (resolve, reject) => {
+      piWifi.status('wlan0', function (err, status) {
+        if (err) {
+          console.error(err.message);
+          reject (err.message);
+        } else {
+          console.log('init complete: ' + status.ssid);
+          resolve (status);
+        }
+      });
+  });
+}
+
+// This wraps the piWifi scan method in a promise to allow it to be used with an async/await call
+function getpiNetworkSIDDs () {
+  return new Promise((resolve, reject) => {
+      piWifi.scan(function (err, networks) {
+      networkSidds = []
+      if (err) {
+        console.error(err.message);
+        reject(err.message);
+      } else {
+        console.log('*** Scan WiFi networks:');
+        for (i = 0; i < networks.length; i++) {
+          console.log(networks[i].ssid);
+          networkSidds.push(networks[i]);
+        }
+        resolve(networkSidds);
+      }
+    });
+  });
+}
+
+
 function WiFiServiceDiscovery () {
   this.status = 'inactive';
+  this.wifiSSID = config.get('defaultWiFi.activeSSID');
+  this.ip = config.get('defaultWiFi.ip');
+  this.mac = config.get('defaultWiFi.mac');
+  this.securitCharacteristic = config.get('defaultWiFi.securityCharacteristic');
+  this.status = 'inactive';
+  this.networks = [];
+}
 
+WiFiServiceDiscovery.prototype.getStatus = async function() {
+  let status = await getpiWifiStatus();
+  this.wifiSSID = status.ssid;
+  this.securitCharacteristic = status.key_mgmt;
+  this.ip = status.ip;
+  this.mac = status.mac;
+  this.status = 'active';
+	return this.status;
 
-  try {
-    piWifi.status('wlan0', function (err, status) {
-      console.log('init complete: ' + status.ssid);
+}
 
-      this.wifiSSID = status.ssid;
-      this.securitCharacteristic = status.key_mgmt;
-      this.ip = status.ip;
-      this.mac = status.mac;
-      this.status = 'active';
-    });
-  } catch (err) {
-    // If we can't get status back we can't do anything. Return a 'status' of incomplete and the error message
-    this.wifiSSID = config.get('defaultWiFi.activeSSID');
-    this.ip = config.get('defaultWiFi.ip');
-    this.mac = config.get('defaultWiFi.mac');
-    this.securitCharacteristic = config.get('defaultWiFi.securityCharacteristic');
-    this.status = 'inactive';
-    console.error(err.message);
-
-    return this.status, err;
-  }
-
-
+WiFiServiceDiscovery.prototype.getNetworkSIDDs = async function() {
+  let networks = await getpiNetworkSIDDs();
+  this.networks = networks;
+  return this.networks;
 }
 
 WiFiServiceDiscovery.prototype.getSSID = function(){
@@ -43,13 +88,16 @@ WiFiServiceDiscovery.prototype.getSSID = function(){
 
 };
 
-wifiService.getSSID();
 
-var networkDetails = {
-  ssid: 'MyNetwork',
-  username: 'demo',
-  password: 'swordfish'
-};
+wifiService.getSSID();
+wifiService.getStatus().then( (state) => {
+  console.log(' The object state is: ' + state);
+});
+
+wifiService.getNetworkSIDDs().then( (networks) => {
+  consol.log(' The network sidds are: ' + networks);
+});
+
 
 
 // This will list the networks currently defined in the wpa config file.
@@ -74,7 +122,10 @@ piWifi.scan(function(err, networks) {
     return console.error(err.message);
   }
   console.log('*** Scan WiFi networks:');
-  console.log(networks);
+  for (i=0; i< networks.length; i++) {
+    console.log(networks[i].ssid);
+
+  }
 });
 
 // =>
