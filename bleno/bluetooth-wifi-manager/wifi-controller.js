@@ -95,7 +95,7 @@ wifiService.getStatus().then( (state) => {
 });
 
 wifiService.getNetworkSIDDs().then( (networks) => {
-  consol.log(' The network sidds are: ' + networks);
+  console.log(' The network sidds are: ' + networks);
 });
 
 
