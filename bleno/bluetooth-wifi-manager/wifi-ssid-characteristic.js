@@ -4,6 +4,7 @@
 
 var util = require('util');
 var bleno = require('bleno');
+const wifi = require('./wifi-controller');
 var BlenoCharacteristic = bleno.Characteristic;
 
 const constants = require('./constants');
@@ -22,7 +23,8 @@ var ActiveSIDDCharacteristic = function() {
     value: null
   });
 
-  this._value = new Buffer(0);
+  //this._value = new Buffer(0);
+  this._value = new Buffer.from(wifi.wifiService.wifiSSID);
   this._updateValueCallback = null;
 };
 
@@ -32,7 +34,8 @@ util.inherits(ActiveSIDDCharacteristic, BlenoCharacteristic);
 
 
 ActiveSIDDCharacteristic.prototype.onReadRequest = function(offset, callback) {
-  console.log('Active SIDD Characteristic - onReadRequest: value = ' + this._value.toString('hex'));
+  //console.log('Active SIDD Characteristic - onReadRequest: value = ' + this._value.toString('hex'));
+  console.log('Active SIDD Characteristic - onReadRequest: value = ' + wifi.wifiService.wifiSSID);
 
   callback(this.RESULT_SUCCESS, this._value);
 };
