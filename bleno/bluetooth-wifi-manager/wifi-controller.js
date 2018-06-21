@@ -26,7 +26,7 @@ function getpiWifiStatus() {
           console.error(err.message);
           reject (err.message);
         } else {
-          console.log('init complete: ' + status.ssid);
+          console.log('*** Scan Current WiFi network complete -> Status: ' + status.ssid);
           resolve (status);
         }
       });
@@ -37,77 +37,79 @@ function getpiWifiStatus() {
 function getpiNetworkSIDDs () {
   return new Promise((resolve, reject) => {
       piWifi.scan(function (err, networks) {
-      networkSidds = []
+      const networkSidds = new Set();
       if (err) {
         console.error(err.message);
         reject(err.message);
       } else {
-        console.log('*** Scan WiFi networks:');
+        console.log('*** Scan WiFi networks complete ***:');
         for (i = 0; i < networks.length; i++) {
-          console.log(networks[i].ssid);
-          networkSidds.push(networks[i]);
+          //console.log(networks[i].ssid);
+          networkSidds.add(networks[i].ssid);
         }
+        //console.log('*** Captured SIDDs networks:');
+        //for (let item of networkSidds) console.log(item);
         resolve(networkSidds);
       }
     });
   });
 }
 
+// This wraps the piWifi ListNetworks method in a promise to allow it to be used with an async/await call
+function getpiWPAconfEntries () {
+  return new Promise(( resolve, reject) => {
+      piWifi.listNetworks(function (err, networksArray) {
+      if (err) {
+        console.error(err.message);
+        reject(err.message);
+      } else {
+        console.log('*** Scan WiFi config complete *** ');
+        //console.log(networksArray);
+        resolve(networksArray);
+      }
+    });
+  });
+}
 
 function WiFiServiceDiscovery () {
-  this.status = 'inactive';
   this.wifiSSID = config.get('defaultWiFi.activeSSID');
   this.ip = config.get('defaultWiFi.ip');
   this.mac = config.get('defaultWiFi.mac');
   this.securitCharacteristic = config.get('defaultWiFi.securityCharacteristic');
   this.status = 'inactive';
-  this.networks = [];
+  this.networks = new Set();
+  this.networksWPAconfig = [];
 }
 
+// The get status method is called to get current network state. This needs to be done before interrogating the object on instantiation.
 WiFiServiceDiscovery.prototype.getStatus = async function() {
   let status = await getpiWifiStatus();
+  this.networks = await getpiNetworkSIDDs();
+  this.networksWPAconfig = await getpiWPAconfEntries();
   this.wifiSSID = status.ssid;
   this.securitCharacteristic = status.key_mgmt;
   this.ip = status.ip;
   this.mac = status.mac;
   this.status = 'active';
 	return this.status;
-
 }
 
-WiFiServiceDiscovery.prototype.getNetworkSIDDs = async function() {
-  let networks = await getpiNetworkSIDDs();
-  this.networks = networks;
-  return this.networks;
-}
 
-WiFiServiceDiscovery.prototype.getSSID = function(){
-  // Return the SSID that is currently set
-  console.log(`Getting default SSID: ${this.wifiSSID}`);
-  return this.wifiSSID;
+//wifiService.getStatus().then( (state) => {
+//  console.log(' The object state is: ' + state);
+//});
 
-};
-
-
-wifiService.getSSID();
-wifiService.getStatus().then( (state) => {
-  console.log(' The object state is: ' + state);
-});
-
-wifiService.getNetworkSIDDs().then( (networks) => {
-  consol.log(' The network sidds are: ' + networks);
-});
 
 
 
 // This will list the networks currently defined in the wpa config file.
-piWifi.listNetworks(function(err, networksArray) {
-  if (err) {
-    return console.error(err.message);
-  }
-  console.log('*** List networks:')
-  console.log(networksArray);
-});
+// piWifi.listNetworks(function(err, networksArray) {
+//   if (err) {
+//     return console.error(err.message);
+//   }
+//   console.log('*** List networks:')
+//   console.log(networksArray);
+//});
 
 // =>
 // [{ network_id: 0, ssid: 'MyNetwork', bssid: 'any', flags: '[DISABLED]' },
@@ -117,16 +119,16 @@ piWifi.listNetworks(function(err, networksArray) {
 
 
 // This will provide a json network of all scanned wifi addresses
-piWifi.scan(function(err, networks) {
-  if (err) {
-    return console.error(err.message);
-  }
-  console.log('*** Scan WiFi networks:');
-  for (i=0; i< networks.length; i++) {
-    console.log(networks[i].ssid);
-
-  }
-});
+// piWifi.scan(function(err, networks) {
+//   if (err) {
+//     return console.error(err.message);
+//   }
+//   console.log('*** Scan WiFi networks:');
+//   for (i=0; i< networks.length; i++) {
+//     console.log(networks[i].ssid);
+//
+//   }
+// });
 
 // =>
 //[
