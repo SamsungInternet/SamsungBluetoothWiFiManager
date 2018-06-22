@@ -6,8 +6,6 @@ const bleno = require("bleno");
 const constants = require('./constants');
 const wifi = require('./wifi-controller');
 
-console.log(`Wifi encryption values are: ${constants.WiFiEncryptionValues.security}`);
-
 var BlenoPrimaryService = bleno.PrimaryService;
 
 var WifiSIDDCharacteristic = require('./wifi-ssid-characteristic');
@@ -16,10 +14,11 @@ var WiFiSecurityCharacteristic = require('./wifi-security-characteristic');
 var NetworkCharacteristic = require('./wifi-networks-characteristic');
 
 console.log('bleno - Bluetooth WiFi Manager');
-var ssid = wifi.wifiService.getSSID();
-console.log(`wifi siid is: ${ssid}`);
 
-bleno.on('stateChange', function(state) {
+wifi.wifiService.getStatus().then( (state) => {
+  console.log(`WiFi -> stateChange: ${state}`);
+
+  bleno.on('stateChange', function(state) {
   console.log('on -> stateChange: ' + state);
 
   if (state === 'poweredOn') {
@@ -29,7 +28,11 @@ bleno.on('stateChange', function(state) {
   }
 });
 
-bleno.on('advertisingStart', function(error) {
+
+
+
+  // Only listen on 'advertisingStart' after the WiFi Manager has scanned networks
+  bleno.on('advertisingStart', function(error) {
   console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
 
   if (!error) {
@@ -46,3 +49,10 @@ bleno.on('advertisingStart', function(error) {
     ]);
   }
 });
+
+
+
+});
+
+
+
