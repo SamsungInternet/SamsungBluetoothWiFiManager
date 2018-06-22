@@ -99,6 +99,9 @@ WiFiServiceDiscovery.prototype.getStatus = async function() {
 //  console.log(' The object state is: ' + state);
 //});
 
+wifiService.getNetworkSIDDs().then( (networks) => {
+  console.log(' The network sidds are: ' + networks);
+});
 
 
 
