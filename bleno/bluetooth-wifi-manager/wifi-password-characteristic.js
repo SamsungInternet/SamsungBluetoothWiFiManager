@@ -2,12 +2,9 @@
  * Created by nherriot on 06/06/18.
  */
 
-/**
- * Created by nherriot on 05/06/18.
- */
-
 var util = require('util');
 var bleno = require('bleno');
+const wifi = require('./wifi-controller');
 var BlenoCharacteristic = bleno.Characteristic;
 
 const constants = require('./constants');
@@ -26,9 +23,11 @@ var WiFiPasswordCharacteristic = function() {
     value: null
   });
 
+  // There is no reading of 'password' data so we can leave this blank on object creation
   this._value = new Buffer(0);
   this._updateValueCallback = null;
 };
+
 
 util.inherits(WiFiPasswordCharacteristic, BlenoCharacteristic);
 
@@ -40,18 +39,35 @@ WiFiPasswordCharacteristic.prototype.onReadRequest = function(offset, callback) 
 };
 
 
-WiFiPasswordCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
-  this._value = data;
+WiFiPasswordCharacteristic.prototype.onWriteRequest = function(passwordData, offset, withoutResponse, callback) {
+  let result = this.RESULT_SUCCESS;
+  console.log('onWriteRequest password data -> ' + passwordData); // TODO Remove this log after testing!!!!
 
-  console.log('WiFi Password Characteristic - onWriteRequest: value = ' + this._value);
+  if(wifi.wifiService.checkPassword(passwordData)) {
+    wifi.wifiService.connect(passwordData).then( (state) => {
+      console.log('WiFi Characteristics connecting to wifi network. State: ' + state);
 
-  if (this._updateValueCallback) {
-    console.log('WiFi Password Characteristic - onWriteRequest: notifying');
+      if (state =='success'){
+        console.log('onWriteRequest connected to wifi network - SUCCESS');
+      } else {
+        console.log('onWriteRequest connected to wifi network - FAILED');
+        result = this.RESULT_UNLIKELY_ERROR;
+      }
 
-    this._updateValueCallback(this._value);
+      if (this._updateValueCallback) {
+        console.log('WiFi Password Characteristic - onWriteRequest: notifying');
+
+        this._updateValueCallback(this._value);
+      }
+
+      callback(result);
+
+    });
   }
 
-  callback(this.RESULT_SUCCESS);
+
+
+
 };
 
 

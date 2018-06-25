@@ -18,6 +18,60 @@ function doubleAfter2Seconds(x) {
   });
 }
 
+
+function validateNonEmpty(inputField) {
+  // See if the input value contains any text
+  if (inputField.value.length == 0) {
+    return false;
+    } else {
+  // The data is present, but may not be correct!
+    return true;
+  }
+}
+
+
+function validateLength(inputField, minLength, maxLength) {
+  // Make sure the input value contains at least the maxiumum or minimum number of characters
+  if (inputField.length < minLength || inputField.length > maxLength) {
+    return false;
+  } else {
+    // The data is OK, so clear the help message
+    return true;
+  }
+}
+
+
+function validatePassword(inputField) {
+  // Make sure the password is within certain boundaries
+  // TODO Add a good password validation library here. For now make sure it is at least 8 chars and less than 32
+  return validateLength(inputField, 8, 32);
+}
+
+
+function validateRegEx(regex, inputStr) {
+  // See if the inputStr data validates OK
+
+  if (!regex.test(inputStr)) {
+      // The data is invalid, so set the help message and return false
+      return false;
+  } else {
+      // The data is OK, so clear the help message and return true
+      return true;
+  }
+}
+
+
+function validateSSID(inputField) {
+  // First ss if the input value contains data
+  // TODO Make the max min values configurable from our configuration file.
+  if (!validateLength(inputField, 1, 32))
+    return false;
+
+  // the first character of SIDD can not be #!; so we need to create a regular expression for that scenario
+  return validateRegEx(/^[\w\-+]{1}[\w\-+!#;]{0,31}$/, inputField);
+}
+
+
 // This wraps the piWifi status method in a promise to allow it to be used with an async/await call
 function getpiWifiStatus() {
   return new Promise( (resolve, reject) => {
@@ -71,6 +125,42 @@ function getpiWPAconfEntries () {
   });
 }
 
+// Temporary for testing
+// TODO Remove this.
+var networkDetails = {
+  	
+  ssid: 'srbackup',
+  username: '',
+  psk: 'Tr3x1949'
+};
+
+
+var networkDetails2 = {
+  ssid: 'skynet',
+  username: '',
+  psk: 'samw3llb33d4y'
+};
+
+
+
+function connectToWiFiNetwork(password) {
+  return new Promise((resolve, reject) => {
+
+
+    piWifi.conectTo (networkDetails, function(err) {
+      if(err) {
+        console.error(err.message);
+        reject(err.message);
+      } else {
+        console.error('Network created successfully!'); //Failed to connect
+        resolve('success');
+      }
+    });
+  });
+}
+
+
+
 function WiFiServiceDiscovery () {
   this.wifiSSID = config.get('defaultWiFi.activeSSID');
   this.ip = config.get('defaultWiFi.ip');
@@ -94,14 +184,69 @@ WiFiServiceDiscovery.prototype.getStatus = async function() {
 	return this.status;
 }
 
+WiFiServiceDiscovery.prototype.connect = async function(password) {
+  let status = await connectToWiFiNetwork(password);
+}
+
+WiFiServiceDiscovery.prototype.setSSID = function(ssid) {
+  if (validateSSID(ssid)){
+    // TODO make this throw an error of invalid number if validation fails
+    this.wifiSSID = ssid;
+    console.log(' setSSID - SSID has been updaed to:' + this.wifiSSID);
+    return true;
+  } else {
+    return false;
+  }
+};
+
+
+WiFiServiceDiscovery.prototype.checkPassword = function(ssid) {
+  return (validatePassword(ssid))
+};
+
 
 //wifiService.getStatus().then( (state) => {
 //  console.log(' The object state is: ' + state);
+
 //});
 
 
+piWifi.check('skynet-guest', function(err, result) {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log(result);
+});
+
+//piWifi.connectTo (networkDetails, function(err) {
+//  if(err) {
+//    console.log('error');
+
+//  } else {
+//    console.log('success');
+//  }
+//});
 
 
+piWifi.connect('srguest', 'St3g1950', function(err) {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log('Successful connection!');
+});
+
+
+piWifi.check('skynet-guest', function(err, result) {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log(result);
+});
+
+
+
+
+//
 // This will list the networks currently defined in the wpa config file.
 // piWifi.listNetworks(function(err, networksArray) {
 //   if (err) {
@@ -119,16 +264,16 @@ WiFiServiceDiscovery.prototype.getStatus = async function() {
 
 
 // This will provide a json network of all scanned wifi addresses
-// piWifi.scan(function(err, networks) {
-//   if (err) {
-//     return console.error(err.message);
-//   }
-//   console.log('*** Scan WiFi networks:');
-//   for (i=0; i< networks.length; i++) {
-//     console.log(networks[i].ssid);
-//
-//   }
-// });
+piWifi.scan(function(err, networks) {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log('*** Scan WiFi networks:');
+  for (i=0; i< networks.length; i++) {
+    console.log(networks[i].ssid);
+    //console.log(networks);
+  }
+});
 
 // =>
 //[
@@ -141,7 +286,7 @@ WiFiServiceDiscovery.prototype.getStatus = async function() {
 //    frequency: 2462,
 //    signalLevel: -28,
 //    flags: '[WPA2-PSK-CCMP][ESS]',
-//    ssid: 'AnotherNetwork' },
+//    ssid: 'Anot herNetwork' },
 //  { bssid: 'aa:11:bb:22:cc:33',
 //    frequency: 2462,
 //    signalLevel: -33,
