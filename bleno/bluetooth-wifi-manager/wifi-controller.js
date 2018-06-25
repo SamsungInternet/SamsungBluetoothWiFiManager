@@ -128,10 +128,8 @@ function getpiWPAconfEntries () {
 // Temporary for testing
 // TODO Remove this.
 var networkDetails = {
-  	
   ssid: 'srbackup',
-  username: '',
-  psk: 'Tr3x1949'
+  password: 'Tr3x1949'
 };
 
 
@@ -210,9 +208,9 @@ WiFiServiceDiscovery.prototype.checkPassword = function(ssid) {
 
 //});
 
-wifiService.getNetworkSIDDs().then( (networks) => {
-  console.log(' The network sidds are: ' + networks);
-});
+//wifiService.getNetworkSIDDs().then( (networks) => {
+  //console.log(' The network sidds are: ' + networks);
+//});
 
 piWifi.check('skynet-guest', function(err, result) {
   if (err) {
@@ -221,22 +219,22 @@ piWifi.check('skynet-guest', function(err, result) {
   console.log(result);
 });
 
-//piWifi.connectTo (networkDetails, function(err) {
-//  if(err) {
-//    console.log('error');
+piWifi.connectTo (networkDetails, function(err) {
+  if(err) {
+    console.log('error');
 
-//  } else {
-//    console.log('success');
-//  }
-//});
-
-
-piWifi.connect('srguest', 'St3g1950', function(err) {
-  if (err) {
-    return console.error(err.message);
+  } else {
+    console.log('success');
   }
-  console.log('Successful connection!');
 });
+
+
+//piWifi.connect('srguest', 'St3g1950', function(err) {
+  //if (err) {
+    //return console.error(err.message);
+  //}
+  //console.log('Successful connection!');
+//});
 
 
 piWifi.check('skynet-guest', function(err, result) {
