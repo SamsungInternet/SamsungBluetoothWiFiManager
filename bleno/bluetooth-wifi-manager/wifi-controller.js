@@ -210,6 +210,9 @@ WiFiServiceDiscovery.prototype.checkPassword = function(ssid) {
 
 //});
 
+wifiService.getNetworkSIDDs().then( (networks) => {
+  console.log(' The network sidds are: ' + networks);
+});
 
 piWifi.check('skynet-guest', function(err, result) {
   if (err) {
