@@ -80,7 +80,7 @@ export async function settWifiSSID(ssid) {
 
     const value = await characteristic.readValue();		
 
-    console.log('BEFORE ssid value:', value);
+    console.log('BEFORE ssid value:', arrayBufferToString(value));
 
     const arrayBuffer = stringToArrayBuffer(ssid);
 
