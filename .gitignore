@@ -5,6 +5,5 @@ yarn.lock
 yarn-error.log
 /cypress/screenshots/
 /templates/.*
-/export/
 /build/
 /app/manifest/

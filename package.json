@@ -9,7 +9,8 @@
     "start": "node build",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
-    "test": "run-p --race dev cy:run"
+    "test": "run-p --race dev cy:run",
+    "deploy": "git subtree push --prefix export origin gh-pages"
   },
   "dependencies": {
     "compression": "^1.7.1",
