@@ -13,8 +13,8 @@ export function isSupported() {
     return !!navigator.bluetooth && !!navigator.bluetooth.requestDevice;
 }
 
-export async function connect() {
-    
+export async function getDevice() {
+
     device = await navigator.bluetooth.requestDevice({
         filters: [{
             name: ['IoT Gateway WiFi Setup']
@@ -23,6 +23,17 @@ export async function connect() {
     });
 
     console.log('device', device);
+
+    return device;
+
+}
+
+export async function connect() {
+    
+    if (!device) {
+        console.log('Device not established yet');
+        return null;
+    }
 
     server = await device.gatt.connect();
 

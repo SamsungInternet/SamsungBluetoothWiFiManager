@@ -28,7 +28,12 @@
 	<h2>Step 1</h2>
 
 	<p>Check your gateway is switched on and press the button to connect.</p>
-	<button id="connect" on:click="onClickConnect()">Connect</button>
+
+	{#if connecting}
+		<button id="connect" disabled><span class="loadingSpinner"></span></button>
+	{:else}
+		<button id="connect" on:click="onClickConnect()">Connect</button>
+	{/if}
 
 {/if}
 
@@ -41,7 +46,8 @@
 		data() {
 			return {
 				supported: null,
-				error: false
+				error: false,
+				connecting: false
 			}
 		},
 		oncreate() {
@@ -50,7 +56,12 @@
 		methods: {
 			onClickConnect() {
 
-				Bluetooth.connect()
+				Bluetooth.getDevice()
+					.then(() => {
+						// User has chosen device, show loading spinner
+						this.set({connecting: true});
+						return Bluetooth.connect();
+					})
 					.then(() => {
 						return Bluetooth.getWifiSSIDs();
 					})
@@ -64,6 +75,9 @@
 							console.log('Setting wifi SSIDs in Store:', wifiSSIDs);
 
 							this.store.set({wifiSSIDs: wifiSSIDs});
+
+							this.set({connecting: false});
+
 							goto('/wifi');
 						}
 					})
