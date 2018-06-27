@@ -1,6 +1,15 @@
 <svelte:head>
-	<title>Setup Things</title>
+	<title>Setup Things - Step 2</title>
 </svelte:head>
+
+<style>
+	#wifi-ssid {
+		width: 100%;
+	}
+	#submit {
+		width: 100%;
+	}
+</style>
 
 <h1>Setup <strong>Things</strong> <img src="logo-light.svg" alt="Things logo" width="50" height="50"/></h1>
 
@@ -8,8 +17,7 @@
 
 <p class="instruction">Your Wi-Fi details</p>
 
-<form method="POST" action="/connect">
-
+<form on:submit="onSubmit(event)">
 	<p>
 		<label for="wifi-ssid">Wi-Fi name (SSID)</label>
 		<select id="wifi-ssid" ref:wifissid on:change="onWifiSSIDChange()">
@@ -22,11 +30,11 @@
 
 	<p>
 		<label for="wifi-pwd">Wi-Fi password</label>
-		<input type="text" id="wifi-pwd" ref:wifipwd on:change="onWifiPwdChange()"/>
+		<input type="password" id="wifi-pwd" ref:wifipwd on:input="onWifiPwdChange()" on:change="onWifiPwdChange()"/>
 	</p>
 
 	<p>
-		<input id="submit" type="submit" value="Submit" disabled={isInvalid}/>
+		<input type="submit" id="submit" disabled={isInvalid} value="Submit"/>
 	</p>
 </form>
 
@@ -34,17 +42,8 @@
 	export default {
 			data() {
 				return {
-					//wifiSSIDs: this.store.get('wifiSSIDs'),
-					//wifiSSIDs: ['foo', 'bar'],
 					isInvalid: true
 				};
-			},
-			oncreate() {
-				console.log('create', this.refs);
-				this.store.on('state', ({ current }) => {
-					console.log('HELLO? on state... what does this mean?', current);
-				});
-				console.log('this.store', this.store);
 			},
 			methods: {
 				getIsValid() {
@@ -58,6 +57,10 @@
 				onWifiPwdChange() {
 					console.log('on wifi pwd change: this.refs', this.refs);
 					this.set({isInvalid: !this.getIsValid()});
+				},
+				onSubmit(event) {
+					console.log('on submit!');
+					event.preventDefault();
 				}
 			}
 		};
