@@ -44,7 +44,9 @@ export async function getWifiSSIDs() {
 
     console.log('Wifi SSIDs value...', value);
 
-    const array = new Uint8Array(value);
+    const array = new Uint8Array(value.buffer);
+
+    const string = String.fromCharCode(...array);
 
     console.log('array ', array, array.length, array.byteLength);
 
@@ -52,6 +54,12 @@ export async function getWifiSSIDs() {
         console.log(i + ' : ' + array[i]);
     }
 
-    return array;
+    console.log('string', string);
+
+    const ssids = string.split(' ');
+
+    console.log('ssids', ssids);
+
+    return ssids;
 
 }

@@ -58,12 +58,9 @@
 
 					console.log('Setting wifi SSIDs in Store:', wifiSSIDs);
 
-					this.store.set({wifiSSIDs: wifiSSIDs})
-						.then(() => {
-							// Proceed to the next page
-							goto('/wifi');
-						});
-
+					this.store.set({wifiSSIDs: wifiSSIDs});
+					goto('/wifi');
+					
 				} else {
 					this.set({error: true});
 				}
