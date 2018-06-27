@@ -16,7 +16,7 @@ export function arrayBufferToString(arrayBuffer) {
 export function stringToArrayBuffer(string) {
     const stringLength = string.length;
     const arrayBuffer = new ArrayBuffer(stringLength * 2);
-    const array = new Uint16Array(buffer);
+    const array = new Uint16Array(arrayBuffer);
     for (let i=0; i < stringLength; i++) {
         array[i] = string.charCodeAt(i);
         console.log({i}, array[i]);

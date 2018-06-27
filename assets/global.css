@@ -100,6 +100,14 @@ p.back {
 	margin-top: 2em;
 }
 
+.error {
+	color: #dc2929;
+}
+
+.error a {
+	color: #e59999
+}
+
 form input[type="submit"]:disabled {
 	background-color: #aaa;
 	color: #ccc;

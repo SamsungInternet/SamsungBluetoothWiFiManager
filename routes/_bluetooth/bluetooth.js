@@ -34,6 +34,11 @@ export async function connect() {
 
 export async function getWifiSSIDs() {
 
+    if (!server) {
+        console.log('Server not established. Try to (re-)connect first.');
+        return null;
+    }
+
     const service = await server.getPrimaryService(WIFI_SETUP_SERVICE_UUID);
 
     console.log('service', service);
@@ -60,6 +65,11 @@ export async function settWifiSSID(ssid) {
 
     console.log('setWifiSSID');
 
+    if (!server) {
+        console.log('Server not established. Try to (re-)connect first.');
+        return null;
+    }
+
     const service = await server.getPrimaryService(WIFI_SETUP_SERVICE_UUID);
 
     console.log('service', service);
@@ -84,6 +94,11 @@ export async function settWifiSSID(ssid) {
 export async function settWifiPassword(password) {
 
     console.log('setWifiPassword');
+
+    if (!server) {
+        console.log('Server not established. Try to (re-)connect first.');
+        return null;
+    }
 
     const service = await server.getPrimaryService(WIFI_SETUP_SERVICE_UUID);
 

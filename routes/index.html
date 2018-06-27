@@ -48,22 +48,29 @@
 			this.set({supported: Bluetooth.isSupported()});
 		},
 		methods: {
-			async onClickConnect() {
+			onClickConnect() {
 
-				const connected = await Bluetooth.connect();
+				Bluetooth.connect()
+					.then(() => {
+						return Bluetooth.getWifiSSIDs();
+					})
+					.then(wifiSSIDs => {
 
-				if (connected) {
+						if (!wifiSSIDs) {
+							console.error('No wifi SSIDs returned', wifiSSIDs);
+							this.set({error: true});
+						} else {
 
-					const wifiSSIDs = await Bluetooth.getWifiSSIDs();
+							console.log('Setting wifi SSIDs in Store:', wifiSSIDs);
 
-					console.log('Setting wifi SSIDs in Store:', wifiSSIDs);
-
-					this.store.set({wifiSSIDs: wifiSSIDs});
-					goto('/wifi');
-					
-				} else {
-					this.set({error: true});
-				}
+							this.store.set({wifiSSIDs: wifiSSIDs});
+							goto('/wifi');
+						}
+					})
+					.catch(error => {
+						console.error('Bluetooth connection error', error);
+						this.set({error: true});
+					});
 
 			}
 		}

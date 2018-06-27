@@ -15,6 +15,10 @@
 
 <h2>Step 2</h2>
 
+{#if error}
+	<h3 class="error">There was a problem connecting to your Gateway. Please <a href="/">start again</a>.</h3>
+{/if}
+
 <p class="instruction">Your Wi-Fi details</p>
 
 <form on:submit="onSubmit(event)">
@@ -46,7 +50,8 @@
 	export default {
 			data() {
 				return {
-					isInvalid: true
+					isInvalid: true,
+					error: false
 				};
 			},
 			methods: {
@@ -69,6 +74,10 @@
 					const ssidResponse = await Bluetooth.settWifiSSID(this.refs.wifissid.value);
 					
 					console.log({ssidResponse});
+
+					if (!ssidResponse) {
+						this.set({error: true});
+					}
 
 					// TODO handle response
 
