@@ -43,8 +43,8 @@ h1 img {
 	font-size: 1.3em;
 }
 
-h2 {
-	margin: 2em 0 1em 0;
+h2, h3 {
+	margin: 1em 0;
 }
 
 form > p {
