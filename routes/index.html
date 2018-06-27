@@ -29,6 +29,8 @@
 
 <script>
 
+	import { goto } from 'sapper/runtime.js';
+
 	const WIFI_SETUP_SERVICE_UUID = '00010000-89bd-43c8-9231-40f6e305f96d';
 	const WIFI_SSID_UUID = '00010001-89bd-43c8-9231-40f6e305f96d'; // Currently set SSID
 	const WIFI_PASSWORD_UUID = '00010002-89bd-43c8-9231-40f6e305f96d';
@@ -50,7 +52,7 @@
 		},
 		methods: {
 			async onClickConnect() {
-				// TODO replace battery_service (using temporarily for testing)
+
 				const device = await navigator.bluetooth.requestDevice({
 						filters: [{
 							name: ['IoT Gateway WiFi Setup']
@@ -76,8 +78,6 @@
 
 				console.log('Wifi SSIDs value...', value);
 
-				//alert('Wifi SSIDs value: ' + value);
-
 				const array = new Uint8Array(value);
 
 				console.log('array ', array, array.length, array.byteLength);
@@ -86,16 +86,11 @@
 					console.log(i + ' : ' + array[i]);
 				}
 
-				// TEST seeing if we can set data we received via Bluetooth (i.e. wifi SSIDs)
-				// and pull that out again in the next page...?
-				
-				this.store.set({wifiSSIDs: ['foo', 'bar', 'baz', 'lurman']});
-					// .then(() => {
-					// 	location.href = '/wifi';
-					// });
-				
-				// TODO how to do client-side routing to switch to the next page?
-				//app.route('/wifi');
+				// TODO replace dummy data with values we receive from Bluetooth
+				this.store.set({wifiSSIDs: ['foo', 'bar', 'baz', 'lurman']})
+					.then(() => {
+						goto('/wifi');
+					});
 
 			}
 		}
