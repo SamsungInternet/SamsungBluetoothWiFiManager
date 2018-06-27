@@ -44,10 +44,10 @@ WiFiPasswordCharacteristic.prototype.onWriteRequest = function(passwordData, off
   console.log('onWriteRequest password data -> ' + passwordData); // TODO Remove this log after testing!!!!
 
   if(wifi.wifiService.checkPassword(passwordData)) {
-    wifi.wifiService.connect(passwordData).then( (state) => {
-      console.log('WiFi Characteristics connecting to wifi network. State: ' + state);
+    wifi.wifiService.connect(passwordData).then( (networkState) => {
+      console.log('WiFi Characteristics connecting to wifi network. State: ' + networkState);
 
-      if (state =='success'){
+      if (networkState.state ==='success'){
         console.log('onWriteRequest connected to wifi network - SUCCESS');
       } else {
         console.log('onWriteRequest connected to wifi network - FAILED');
@@ -59,15 +59,9 @@ WiFiPasswordCharacteristic.prototype.onWriteRequest = function(passwordData, off
 
         this._updateValueCallback(this._value);
       }
-
       callback(result);
-
     });
   }
-
-
-
-
 };
 
 

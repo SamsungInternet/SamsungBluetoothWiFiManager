@@ -20,7 +20,7 @@ var networkDetails = {
 
 var networkDetails2 = {
   ssid: 'srguest',
-  password: 'xxxxxxxx',
+  password: 'St3g1950',
   key_mgmt: 'WPA-PSK',
 };
 
@@ -174,7 +174,51 @@ function validateSSID(inputField) {
  *  id: 0
  *  }
  */
-function getpiWifiStatus() {
+function getpiWiFiStatusDelay(time) {
+  return new Promise( (resolve, reject) => {
+	  
+	  setTimeout(() => {
+		  piWifi.status('wlan0', function (err, status) {
+			if (err) {
+			  console.error(err.message);
+			  reject (err.message);
+			} else {
+			  console.log('*** Scan Current WiFi network complete -> Status: ' + status.ssid);
+			  console.log(status);
+			  resolve (status);
+			}
+		  });
+		 }, time*1000);
+  });
+}
+
+
+
+/**
+ * A wrapper function which wraps the piWifi.status method in a promise so that it can be used in an async call in a linear way
+ * and to allow the library to plugin other WiFi control libraries without changing the interface.
+ *
+ * @returns {Promise} 'Reject' if the subsystem can't get status of the WiFi networks.
+ * Or 'Resolve' with a status JSON Object containing the result of the WiFi status
+ *
+ * e.g.
+ * {
+ *  bssid: '2c:f5:d3:02:ea:d9',
+ *  frequency: 2412,
+ *  mode: 'station',
+ *  key_mgmt: 'wpa2-psk',
+ *  ssid: 'MyNetwork',
+ *  pairwise_cipher: 'CCMP',
+ *  group_cipher: 'CCMP',
+ *  p2p_device_address: 'aa:bb:cc:dd:ee:ff',
+ *  wpa_state: 'COMPLETED',
+ *  ip: '10.20.30.40',
+ *  mac: 'a1:b2:c3:d4:e5:f6',
+ *  uuid: 'e1cda789-8c88-53e8-ffff-31c304580c22',
+ *  id: 0
+ *  }
+ */
+function getpiWiFiStatus() {
   return new Promise( (resolve, reject) => {
       piWifi.status('wlan0', function (err, status) {
         if (err) {
@@ -182,6 +226,7 @@ function getpiWifiStatus() {
           reject (err.message);
         } else {
           console.log('*** Scan Current WiFi network complete -> Status: ' + status.ssid);
+          console.log(status);
           resolve (status);
         }
       });
@@ -262,15 +307,22 @@ function getpiWPAconfEntries () {
 
 
 
-function connectToWiFiNetwork(password) {
+function connectToWiFiNetwork(ssid, password) {
   return new Promise((resolve, reject) => {
+    // Create our network details from SSID and password.
+    let networkDetails = {
+      ssid: ssid,
+      password: password,
+      key_mgmt: 'WPA-PSK',		// TODO this has to be passed in as a parameter
+    }
+    console.log('connectToWiFiNetwork attempting to connect to SSID: ' + networkDetails.ssid);
 
-    piWifi.conectTo (networkDetails, function(err) {
+    piWifi.connectTo (networkDetails, function(err) {
       if(err) {
         console.error(err.message);
         reject(err.message);
       } else {
-        console.error('Network created successfully!'); //Failed to connect
+        console.log('Network created successfully!');
         resolve('success');
       }
     });
@@ -297,7 +349,7 @@ function WiFiServiceDiscovery () {
   this.wifiSSID = config.get('defaultWiFi.activeSSID');
   this.ip = config.get('defaultWiFi.ip');
   this.mac = config.get('defaultWiFi.mac');
-  this.securitCharacteristic = config.get('defaultWiFi.securityCharacteristic');
+  this.securityCharacteristic = config.get('defaultWiFi.securityCharacteristic');
   this.status = 'inactive';
   this.networks = new Set();
   this.networksWPAconfig = [];
@@ -306,25 +358,61 @@ function WiFiServiceDiscovery () {
 
 /**
  * An async function that returns when the WiFiServiceDiscovery object is populated with current state of the network.
- * This method fires off WiFi lib calls to get the Networks SSIDs Array, the current status (connected or not) and
+ * This method fires off WiFi lib calls to get the Networks SSIDs Array, the current status (connected or not) and populates
+ * the object member variables
  *
  * @returns {string} The string representing the current state.
  *
  */
 WiFiServiceDiscovery.prototype.getStatus = async function() {
-  let status = await getpiWifiStatus();
+  let status = await getpiWiFiStatus();
   this.networks = await getpiNetworkSIDDs();
   this.networksWPAconfig = await getpiWPAconfEntries();
+  // Check if SSID is undefined
   this.wifiSSID = status.ssid;
-  this.securitCharacteristic = status.key_mgmt;
+  this.securityCharacteristic = status.key_mgmt;
   this.ip = status.ip;
   this.mac = status.mac;
-  this.status = 'active';
+  this.wpaStatus = status.wpa_state;   // TODO This should only be active when we know we have a completed connection
 	return this.status;
 }
 
-WiFiServiceDiscovery.prototype.connect = async function(password) {
-  let status = await connectToWiFiNetwork(password);
+WiFiServiceDiscovery.prototype.connect = async function(password) {	
+  var status = await connectToWiFiNetwork(this.wifiSSID, password);
+  if (status=='success') {
+    // We need to now ask the wpa_supplicant process if it had the new details of the wifi connection before we
+    // report this as a true success. So call the getpiWiFiStatus method first.    
+    let connectionStatus = await getpiWiFiStatus();
+    
+    console.log('WiFiServiceDiscovery.connect -> connectionStatus is: ');
+	console.log(connectionStatus);
+
+    this.wifiSSID = connectionStatus.ssid;
+    this.securityCharacteristic = connectionStatus.key_mgmt;
+    this.ip = connectionStatus.ip;
+    this.mac = connectionStatus.mac;
+    this.wpaStatus = connectionStatus.wpa_state;
+    
+    // If we got a success back from wpa_supplicant that a connection is being established but if the wpa_state is 'DISCONNECTED' 
+    // or 'SCANNING' then we should wait a few sec's and get state again. if that fails then return will contain a 'FAILED' status.
+    if (connectionStatus.wpa_state == 'DISCONNECTED' | connectionStatus.wpa_state == 'SCANNING') {
+		// Try again to get our network state and delay for some time
+		let connectionStatusDelayed = await getpiWiFiStatusDelay(5);
+		console.log('WiFiServiceDiscovery.connect -> connectionStatus is: ');
+		console.log(connectionStatus);
+
+		this.wifiSSID = connectionStatusDelayed.ssid;
+		this.securityCharacteristic = connectionStatusDelayed.key_mgmt;
+		this.ip = connectionStatusDelayed.ip;
+		this.mac = connectionStatusDelayed.mac;
+		this.wpaStatus = connectionStatusDelayed.wpa_state;
+		if (!connectionStatusDelayed.wpa_state == 'COMPLETED'){
+			status = 'Failed';
+			console.error('WiFiServiceDiscovery.connect attempted to connect to a new WiFi Network but failed');
+		}
+	}
+  }
+  return {status: status, ipAddress: this.ip};
 }
 
 
@@ -376,14 +464,26 @@ WiFiServiceDiscovery.prototype.checkPassword = function(ssid) {
   //console.log(result);
 //});
 
-//piWifi.connectTo (networkDetails2, function(err) {
-  //if(err) {
-    //console.log('Connection error: ' + err.message);
+piWifi.connectTo (networkDetails2, function(err) {
+  if(err) {
+    console.log('Connection error: ' + err.message);
 
-  //} else {
-    //console.log('success');
-  //}
-//});
+  } else {
+    console.log('success');
+  }
+});
+
+
+//~ myTestDelay = async function(time) {
+	//~ console.log(' ** myTestDelay connectionStatus ** ');
+	//~ let connectionStatus = await getpiWiFiStatusDelay(time);
+	//~ return "complete";
+//~ };
+
+//~ myTestDelay(5).then( (state) => {
+	//~ console.log(' ** Start await call **' + state);
+
+//~ });
 
 
 //piWifi.connect('nicks-nexus', 'xxxxxxxx', function(err) {
@@ -404,13 +504,13 @@ WiFiServiceDiscovery.prototype.checkPassword = function(ssid) {
 //});
 
 
-debugger;
-  piWifi.connect('srguest', 'xxxxxxxx', function(err) {
-	if (err) {
-		return console.error(err);
-	}
-	console.log('Successful connection!');
-  });
+//~ debugger;
+  //~ piWifi.connect('srguest', 'xxxxxxxx', function(err) {
+	//~ if (err) {
+		//~ return console.error(err);
+	//~ }
+	//~ console.log('Successful connection!');
+  //~ });
 
 
 
