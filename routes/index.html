@@ -18,6 +18,11 @@
 		<a href="https://caniuse.com/#feat=web-bluetooth">supporting browser</a> (such as Samsung Internet, Chrome or Opera).</p>
 
 {:elseif supported}
+
+	{#if error}
+		<h3 class="error">There was a problem connecting to your Gateway. Please try again.</h3>
+	{/if}
+
 	<h3>To setup your Gateway and configure it to use your wi-fi network, follow these steps.</h3>
 
 	<h2>Step 1</h2>
@@ -30,67 +35,38 @@
 <script>
 
 	import { goto } from 'sapper/runtime.js';
-
-	const WIFI_SETUP_SERVICE_UUID = '00010000-89bd-43c8-9231-40f6e305f96d';
-	const WIFI_SSID_UUID = '00010001-89bd-43c8-9231-40f6e305f96d'; // Currently set SSID
-	const WIFI_PASSWORD_UUID = '00010002-89bd-43c8-9231-40f6e305f96d';
-	const WIFI_SECURITY_UUID = '00010003-89bd-43c8-9231-40f6e305f96d';
-	const WIFI_SIDDS_LIST_UUID = '00010004-89bd-43c8-9231-40f6e305f96d';
+	import * as Bluetooth from './_bluetooth/bluetooth.js';
 
 	export default {
 		data() {
 			return {
-				supported: null
+				supported: null,
+				error: false
 			}
 		},
 		oncreate() {
-			if (navigator.bluetooth && navigator.bluetooth.requestDevice) {
-				this.set({supported: true});
-			} else {
-				this.set({supported: false});
-			}
+			this.set({supported: Bluetooth.isSupported()});
 		},
 		methods: {
 			async onClickConnect() {
 
-				const device = await navigator.bluetooth.requestDevice({
-						filters: [{
-							name: ['IoT Gateway WiFi Setup']
-						}],
-						optionalServices: [WIFI_SETUP_SERVICE_UUID]
-					});
+				const connected = await Bluetooth.connect();
 
-				console.log('device', device);
+				if (connected) {
 
-				const server = await device.gatt.connect();
+					const wifiSSIDs = await Bluetooth.getWifiSSIDs();
 
-				console.log('server', server);
+					console.log('Setting wifi SSIDs in Store:', wifiSSIDs);
 
-				const service = await server.getPrimaryService(WIFI_SETUP_SERVICE_UUID);
+					this.store.set({wifiSSIDs: wifiSSIDs})
+						.then(() => {
+							// Proceed to the next page
+							goto('/wifi');
+						});
 
-				console.log('service', service);
-
-				const characteristic = await service.getCharacteristic(WIFI_SIDDS_LIST_UUID);
-
-				console.log('characteristic', characteristic);
-
-				const value = await characteristic.readValue();		
-
-				console.log('Wifi SSIDs value...', value);
-
-				const array = new Uint8Array(value);
-
-				console.log('array ', array, array.length, array.byteLength);
-
-				for (let i=0; i < array.byteLength; i++) {
-					console.log(i + ' : ' + array[i]);
+				} else {
+					this.set({error: true});
 				}
-
-				// TODO replace dummy data with values we receive from Bluetooth
-				this.store.set({wifiSSIDs: ['foo', 'bar', 'baz', 'lurman']})
-					.then(() => {
-						goto('/wifi');
-					});
 
 			}
 		}
