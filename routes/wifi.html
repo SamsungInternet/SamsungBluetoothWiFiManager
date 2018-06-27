@@ -62,7 +62,7 @@
 					console.log('on wifi pwd change: this.refs', this.refs);
 					this.set({isInvalid: !this.getIsValid()});
 				},
-				onSubmit(event) {
+				async onSubmit(event) {
 					console.log('on submit!');
 					event.preventDefault();
 
