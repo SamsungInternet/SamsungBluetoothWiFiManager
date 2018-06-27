@@ -13,7 +13,7 @@ const constants = require('./constants');
 
 var NetworkCharacteristic = function() {
   NetworkCharacteristic.super_.call(this, {
-    uuid: constants.WIFI_SIDDS_LIST_UUID,
+    uuid: constants.WIFI_SSIDS_LIST_UUID,
     properties: ['read', 'write', 'notify'],
     descriptors: [
       new bleno.Descriptor({
@@ -38,7 +38,7 @@ util.inherits(NetworkCharacteristic, BlenoCharacteristic);
 NetworkCharacteristic.prototype.onReadRequest = function(offset, callback) {
   var result = this.RESULT_SUCCESS;
 
-  // Take our objects local variable _value and pass into a buffer to be used by the bluetooth stack. _value should be our list of network SIDD values
+  // Take our objects local variable _value and pass into a buffer to be used by the bluetooth stack. _value should be our list of network SSID values
   var data = new Buffer(this._value, 'utf-8');
   // currently the bluetooth stack ingests about 22 octets at a time. if we have not ingested all our octets we should return success and take 22 away from
   // the start of our buffer. The 'offset' value is the amount of octets we have already sent.
