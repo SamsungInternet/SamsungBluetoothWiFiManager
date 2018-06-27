@@ -145,7 +145,7 @@ function validateSSID(inputField) {
   if (!validateLength(inputField, 1, 32))
     return false;
 
-  // the first character of SIDD can not be #!; so we need to create a regular expression for that scenario
+  // the first character of SSID can not be #!; so we need to create a regular expression for that scenario
   return validateRegEx(/^[\w\-+]{1}[\w\-+!#;]{0,31}$/, inputField);
 }
 
@@ -237,7 +237,7 @@ function getpiWiFiStatus() {
 /**
  * A wrapper function which wraps the piWifi.scan method in a promise so that it can be used in an async call in a linear way
  * and to allow the library to plugin other WiFi control libraries without changing the interface.
- * This method will also use a javascript SET to ensure no duplicate SIDD's are stored.
+ * This method will also use a javascript SET to ensure no duplicate SSID's are stored.
  *
  * @returns {Promise} 'Reject' if the subsystem can't scan WiFi networks.
  * Or 'Resolve' with a networkSidds JSON Object containing the result of the WiFi scan
@@ -256,7 +256,7 @@ function getpiWiFiStatus() {
  * ssid: 'AnotherNetwork' },
  *
  */
-function getpiNetworkSIDDs () {
+function getpiNetworkSSIDs () {
   return new Promise((resolve, reject) => {
       piWifi.scan(function (err, networks) {
       const networkSidds = new Set();
@@ -269,7 +269,7 @@ function getpiNetworkSIDDs () {
           //console.log(networks[i].ssid);
           networkSidds.add(networks[i].ssid);
         }
-        //console.log('*** Captured SIDDs networks:');
+        //console.log('*** Captured SSIDs networks:');
         //for (let item of networkSidds) console.log(item);
         resolve(networkSidds);
       }
@@ -365,8 +365,8 @@ function WiFiServiceDiscovery () {
  *
  */
 WiFiServiceDiscovery.prototype.getStatus = async function() {
-  let status = await getpiWiFiStatus();
-  this.networks = await getpiNetworkSIDDs();
+  let status = await getpiWifiStatus();
+  this.networks = await getpiNetworkSSIDs();
   this.networksWPAconfig = await getpiWPAconfEntries();
   // Check if SSID is undefined
   this.wifiSSID = status.ssid;
@@ -453,7 +453,7 @@ WiFiServiceDiscovery.prototype.checkPassword = function(ssid) {
 
 //});
 
-//wifiService.getNetworkSIDDs().then( (networks) => {
+//wifiService.getNetworkSSIDs().then( (networks) => {
   //console.log(' The network sidds are: ' + networks);
 //});
 

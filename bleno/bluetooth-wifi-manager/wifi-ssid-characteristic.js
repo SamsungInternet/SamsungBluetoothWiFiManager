@@ -10,14 +10,14 @@ var BlenoCharacteristic = bleno.Characteristic;
 const constants = require('./constants');
 
 
-var ActiveSIDDCharacteristic = function() {
-  ActiveSIDDCharacteristic.super_.call(this, {
+var ActiveSSIDCharacteristic = function() {
+  ActiveSSIDCharacteristic.super_.call(this, {
     uuid: constants.WIFI_SSID_UUID,
     properties: ['read', 'write', 'notify'],
     descriptors: [
       new bleno.Descriptor({
         uuid: '2901',
-        value: 'The current WiFi SIDD name'
+        value: 'The current WiFi SSID name'
       })
     ],
     value: null
@@ -29,46 +29,46 @@ var ActiveSIDDCharacteristic = function() {
 };
 
 
-util.inherits(ActiveSIDDCharacteristic, BlenoCharacteristic);
+util.inherits(ActiveSSIDCharacteristic, BlenoCharacteristic);
 
 
-ActiveSIDDCharacteristic.prototype.onReadRequest = function(offset, callback) {
-  console.log('Active SIDD Characteristic - onReadRequest: value = ' + wifi.wifiService.wifiSSID);
+ActiveSSIDCharacteristic.prototype.onReadRequest = function(offset, callback) {
+  console.log('Active SSID Characteristic - onReadRequest: value = ' + wifi.wifiService.wifiSSID);
 
   callback(this.RESULT_SUCCESS, this._value);
 };
 
 
-ActiveSIDDCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
+ActiveSSIDCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
   let result = this.RESULT_SUCCESS;
   console.log('onWriteRequest SSID data -> ' + data);
 
   if (wifi.wifiService.setSSID(data)) {
     this._value = data;
-    console.log('Active SIDD Characteristic - onWriteRequest: value = ' + this._value);
+    console.log('Active SSID Characteristic - onWriteRequest: value = ' + this._value);
   } else {
     console.error('The SSID value is illegal. Tried setting: ' + data);
     result = this.RESULT_UNLIKELY_ERROR;
   }
 
   if (this._updateValueCallback) {
-    console.log('Active SIDD Characteristic - onWriteRequest: notifying');
+    console.log('Active SSID Characteristic - onWriteRequest: notifying');
     this._updateValueCallback(this._value);
   }
   callback(result);
 };
 
 
-ActiveSIDDCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
-  console.log('Active SIDD Characteristic - onSubscribe');
+ActiveSSIDCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
+  console.log('Active SSID Characteristic - onSubscribe');
   this._updateValueCallback = updateValueCallback;
 };
 
 
-ActiveSIDDCharacteristic.prototype.onUnsubscribe = function() {
-  console.log('Active SIDD Characteristic - onUnsubscribe');
+ActiveSSIDCharacteristic.prototype.onUnsubscribe = function() {
+  console.log('Active SSID Characteristic - onUnsubscribe');
   this._updateValueCallback = null;
 };
 
 
-module.exports = ActiveSIDDCharacteristic;
+module.exports = ActiveSSIDCharacteristic;
