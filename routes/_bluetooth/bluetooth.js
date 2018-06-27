@@ -1,3 +1,5 @@
+import {arrayBufferToString, stringToArrayBuffer} from './utils.js';
+
 const WIFI_SETUP_SERVICE_UUID = '00010000-89bd-43c8-9231-40f6e305f96d';
 const WIFI_SSID_UUID = '00010001-89bd-43c8-9231-40f6e305f96d'; // Currently set SSID
 const WIFI_PASSWORD_UUID = '00010002-89bd-43c8-9231-40f6e305f96d';
@@ -44,22 +46,59 @@ export async function getWifiSSIDs() {
 
     console.log('Wifi SSIDs value...', value);
 
-    const array = new Uint8Array(value.buffer);
-
-    const string = String.fromCharCode(...array);
-
-    console.log('array ', array, array.length, array.byteLength);
-
-    for (let i=0; i < array.byteLength; i++) {
-        console.log(i + ' : ' + array[i]);
-    }
-
-    console.log('string', string);
+    const string = arrayBufferToString(value.buffer);
 
     const ssids = string.split(' ');
 
     console.log('ssids', ssids);
 
     return ssids;
+
+}
+
+export async function settWifiSSID(ssid) {
+
+    console.log('setWifiSSID');
+
+    const service = await server.getPrimaryService(WIFI_SETUP_SERVICE_UUID);
+
+    console.log('service', service);
+
+    const characteristic = await service.getCharacteristic(WIFI_SSID_UUID);
+
+    console.log('characteristic', characteristic);
+
+    const value = await characteristic.readValue();		
+
+    console.log('BEFORE ssid value:', value);
+
+    const arrayBuffer = stringToArrayBuffer(ssid);
+
+    const response = await characteristic.writeValue(arrayBuffer);
+
+    console.log({response});
+
+    return response;
+}
+
+export async function settWifiPassword(password) {
+
+    console.log('setWifiPassword');
+
+    const service = await server.getPrimaryService(WIFI_SETUP_SERVICE_UUID);
+
+    console.log('service', service);
+
+    const characteristic = await service.getCharacteristic(WIFI_PASSWORD_UUID);
+
+    console.log('characteristic', characteristic);
+
+    const arrayBuffer = stringToArrayBuffer(password);
+
+    const response = await characteristic.writeValue(arrayBuffer);
+
+    console.log({response});
+
+    return response;
 
 }

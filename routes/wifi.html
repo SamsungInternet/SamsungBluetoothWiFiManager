@@ -39,6 +39,10 @@
 </form>
 
 <script>
+
+	import { goto } from 'sapper/runtime.js';
+	import * as Bluetooth from './_bluetooth/bluetooth.js';
+
 	export default {
 			data() {
 				return {
@@ -61,6 +65,19 @@
 				onSubmit(event) {
 					console.log('on submit!');
 					event.preventDefault();
+
+					const ssidResponse = await Bluetooth.settWifiSSID(this.refs.wifissid.value);
+					
+					console.log({ssidResponse});
+
+					// TODO handle response
+
+					const pwdResponse = await Bluetooth.settWifiPassword(this.refs.wifipwd.value);
+
+					console.log({pwdResponse});
+
+					// TODO handle response					
+
 				}
 			}
 		};
