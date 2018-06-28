@@ -8,32 +8,6 @@ const config = require('config');
 const wifiService = new WiFiServiceDiscovery();
 
 
-// Temporary for testing
-// TODO Remove this.
-var networkDetails = {
-  ssid: 'srbackup',
-  password: '********',
-  key_mgmt: 'WPA-PSK',
-
-};
-
-
-var networkDetails2 = {
-  ssid: 'srguest',
-  password: '******',
-  key_mgmt: 'WPA-PSK',
-};
-
-
-var networkDetails3 = {
-  ssid: 'skynet',
-  password: 'xxxxxxxx',
-
-};
-
-
-
-
 // First create a promise which will wait some time before returning.
 // Here we add a delay by using the setTimeout function. Our Promise gets
 // resolved after 2 seconds and is loged out to the screen at line 41.
@@ -468,23 +442,6 @@ WiFiServiceDiscovery.prototype.checkPassword = function(ssid) {
   //console.log(' The network sidds are: ' + networks);
 //});
 
-//piWifi.check('srbackup', function(err, result) {
-  //if (err) {
-    //return console.error(err.message);
-  //}
-  //console.log(result);
-//});
-
-piWifi.connectTo (networkDetails, function(err) {
-  if(err) {
-    console.log('Connection error: ' + err.message);
-
-  } else {
-    console.log('success');
-  }
-});
-
-
 //~ myTestDelay = async function(time) {
 	//~ console.log(' ** myTestDelay connectionStatus ** ');
 	//~ let connectionStatus = await getpiWiFiStatusDelay(time);
@@ -496,15 +453,6 @@ piWifi.connectTo (networkDetails, function(err) {
 
 //~ });
 
-
-//piWifi.connect('nicks-nexus', 'xxxxxxxx', function(err) {
-  //if (err) {
-    //return console.error(err);
-  //}
-  //console.log('Successful connection!');
-//});
-
-
 //piWifi.disconnect(function(err) {
   //if (err) {
     //return console.error(err.message);
@@ -513,119 +461,6 @@ piWifi.connectTo (networkDetails, function(err) {
   
 
 //});
-
-
-//~ debugger;
-  //~ piWifi.connect('srguest', 'xxxxxxxx', function(err) {
-	//~ if (err) {
-		//~ return console.error(err);
-	//~ }
-	//~ console.log('Successful connection!');
-  //~ });
-
-
-
-//piWifi.connect('srbackup', 'xxxxxxxx', function(err) {
-  //if (err) {
-    //return console.error(err);
-  //}
-  //console.log('Successful connection!');
-//});
-
-
-
-//piWifi.check('srbackup', function(err, result) {
-  //if (err) {
-    //return console.error(err);
-  //}
-  //console.log(result);
-//});
-
-
-
-
-//
-// This will list the networks currently defined in the wpa config file.
-// piWifi.listNetworks(function(err, networksArray) {
-//   if (err) {
-//     return console.error(err.message);
-//   }
-//   console.log('*** List networks:')
-//   console.log(networksArray);
-//});
-
-// =>
-// [{ network_id: 0, ssid: 'MyNetwork', bssid: 'any', flags: '[DISABLED]' },
-// { network_id: 1, ssid: 'Skynet', bssid: 'any', flags: '[CURRENT]' }]
-
-
-
-
-// This will provide a json network of all scanned wifi addresses
-//piWifi.scan(function(err, networks) {
-  //if (err) {
-    //return console.error(err.message);
-  //}
-  //console.log('*** Scan WiFi networks:');
-  //for (i=0; i< networks.length; i++) {
-    //console.log(networks[i].ssid);
-    ////console.log(networks);
-  //}
-//});
-
-// =>
-//[
-//  { bssid: 'aa:bb:cc:dd:ee:ff',
-//    frequency: 2462,
-//    signalLevel: -40,
-//    flags: '[WPA2-PSK-CCMP][WPS][ESS]',
-//    ssid: 'MyNetwork' },
-//  { bssid: '11:22:33:44:55:66',
-//    frequency: 2462,
-//    signalLevel: -28,
-//    flags: '[WPA2-PSK-CCMP][ESS]',
-//    ssid: 'Anot herNetwork' },
-//  { bssid: 'aa:11:bb:22:cc:33',
-//    frequency: 2462,
-//    signalLevel: -33,
-//    flags: '[WPA2-EAP-CCMP-preauth][WPS][ESS]',
-//    ssid: 'MyEnterpriseNetwork' },
-//  { bssid: 'c0:56:27:44:3b:9c',
-//    frequency: 2412,
-//    signalLevel: -59,
-//    flags: '[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]',
-//    ssid: 'MyGuestsNetwork'
-//  }
-//]
-
-
-
-
-// piWifi.status('wlan0', function(err, status) {
-//   if (err) {
-//     return console.error(err.message);
-//   }
-//   console.log('*** Status of WiFi Network:');
-//   console.log(status.ssid);
-// });
-
-// =>
-//{
-//  bssid: '2c:f5:d3:02:ea:d9',
-//  frequency: 2412,
-//  mode: 'station',
-//  key_mgmt: 'wpa2-psk',
-//  ssid: 'MyNetwork',
-//  pairwise_cipher: 'CCMP',
-//  group_cipher: 'CCMP',
-//  p2p_device_address: 'aa:bb:cc:dd:ee:ff',
-//  wpa_state: 'COMPLETED',
-//  ip: '10.20.30.40',
-//  mac: 'a1:b2:c3:d4:e5:f6',
-//  uuid: 'e1cda789-8c88-53e8-ffff-31c304580c22',
-//  id: 0
-//}
-
 
 
 

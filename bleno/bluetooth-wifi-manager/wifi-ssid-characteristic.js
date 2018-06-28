@@ -48,6 +48,7 @@ ActiveSSIDCharacteristic.prototype.onWriteRequest = function(data, offset, witho
     console.log('Active SSID Characteristic - onWriteRequest: value = ' + this._value);
   } else {
     console.error('The SSID value is illegal. Tried setting: ' + data);
+    console.error('The HEX values of the illegal data look like: ' + Buffer.from(data, 'utf8').toString('hex'));
     result = this.RESULT_UNLIKELY_ERROR;
   }
 
