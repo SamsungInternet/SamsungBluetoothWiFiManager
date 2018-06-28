@@ -45,9 +45,10 @@ WiFiPasswordCharacteristic.prototype.onWriteRequest = function(passwordData, off
 
   if(wifi.wifiService.checkPassword(passwordData)) {
     wifi.wifiService.connect(passwordData).then( (networkState) => {
-      console.log('WiFi Characteristics connecting to wifi network. State: ' + networkState);
+      console.log('WiFi Characteristics connecting to wifi network. State is: ');
+      console.log(networkState);
 
-      if (networkState.state ==='success'){
+      if (networkState.status =='success'){
         console.log('onWriteRequest connected to wifi network - SUCCESS');
       } else {
         console.log('onWriteRequest connected to wifi network - FAILED');

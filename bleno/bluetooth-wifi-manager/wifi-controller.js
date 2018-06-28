@@ -367,13 +367,14 @@ WiFiServiceDiscovery.prototype.connect = async function(password) {
     this.mac = connectionStatus.mac;
     this.wpaStatus = connectionStatus.wpa_state;
     
-    // If we got a success back from wpa_supplicant that a connection is being established but if the wpa_state is 'DISCONNECTED' 
-    // or 'SCANNING' then we should wait a few sec's and get state again. if that fails then return will contain a 'FAILED' status.
-    if (connectionStatus.wpa_state == 'DISCONNECTED' | connectionStatus.wpa_state == 'SCANNING') {
+    // If we got a success back from wpa_supplicant that a connection is being established but the wpa_state is 'DISCONNECTED' 
+    // or 'SCANNING' then we should wait a few sec's and get state again. if that fails then return with a result containg a 'FAILED' status.
+    if (connectionStatus.wpa_state == 'DISCONNECTED' | connectionStatus.wpa_state == 'SCANNING' | connectionStatus.wpa_state == 'ASSOCIATING') {
 		// Try again to get our network state and delay for some time
-		let connectionStatusDelayed = await getpiWiFiStatusDelay(5);
+		console.log('WiFiServiceDiscovery.connect -> Setting a delay and then querry if the connection is established ');
+		let connectionStatusDelayed = await getpiWiFiStatusDelay(10);				// TODO Make the timeout configurable
 		console.log('WiFiServiceDiscovery.connect -> connectionStatus is: ');
-		console.log(connectionStatus);
+		console.log(connectionStatusDelayed);
 
 		this.wifiSSID = connectionStatusDelayed.ssid;
 		this.securityCharacteristic = connectionStatusDelayed.key_mgmt;
