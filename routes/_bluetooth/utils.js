@@ -1,5 +1,5 @@
 /**
- * See: https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
+ * Based on: https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
  */
 export function arrayBufferToString(arrayBuffer) {
     const array = new Uint8Array(arrayBuffer);
@@ -11,12 +11,12 @@ export function arrayBufferToString(arrayBuffer) {
 }
 
 /**
- * See: https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
+ * Based on: https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
  */
 export function stringToArrayBuffer(string) {
     const stringLength = string.length;
-    const arrayBuffer = new ArrayBuffer(stringLength * 2);
-    const array = new Uint16Array(arrayBuffer);
+    const arrayBuffer = new ArrayBuffer(stringLength);
+    const array = new Uint8Array(arrayBuffer);
     for (let i=0; i < stringLength; i++) {
         array[i] = string.charCodeAt(i);
         console.log({i}, array[i]);

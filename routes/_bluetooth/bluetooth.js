@@ -1,10 +1,12 @@
 import {arrayBufferToString, stringToArrayBuffer} from './utils.js';
 
-const WIFI_SETUP_SERVICE_UUID = '00010000-89bd-43c8-9231-40f6e305f96d';
-const WIFI_SSID_UUID = '00010001-89bd-43c8-9231-40f6e305f96d'; // Currently set SSID
-const WIFI_PASSWORD_UUID = '00010002-89bd-43c8-9231-40f6e305f96d';
-const WIFI_SECURITY_UUID = '00010003-89bd-43c8-9231-40f6e305f96d';
-const WIFI_SIDDS_LIST_UUID = '00010004-89bd-43c8-9231-40f6e305f96d';
+const WIFI_SETUP_SERVICE_UUID = '00010000-89bd-43c8-9231-40f6e305f96d',
+      WIFI_SSID_UUID = '00010001-89bd-43c8-9231-40f6e305f96d', // Currently set SSID
+      WIFI_PASSWORD_UUID = '00010002-89bd-43c8-9231-40f6e305f96d',
+      WIFI_SECURITY_UUID = '00010003-89bd-43c8-9231-40f6e305f96d',
+      WIFI_SIDDS_LIST_UUID = '00010004-89bd-43c8-9231-40f6e305f96d',
+      SUCCESSFUL = true,
+      UNSUCCESSFUL = false;
 
 let device,
     server;
@@ -72,13 +74,16 @@ export async function getWifiSSIDs() {
 
 }
 
-export async function settWifiSSID(ssid) {
+/**
+ * Returns a boolean for whether the write succeeded
+ */
+export async function setWifiSSID(ssid) {
 
-    console.log('setWifiSSID');
+    console.log('setWifiSSID', `"${ssid}"`);
 
     if (!server) {
         console.log('Server not established. Try to (re-)connect first.');
-        return null;
+        return UNSUCCESSFUL;
     }
 
     const service = await server.getPrimaryService(WIFI_SETUP_SERVICE_UUID);
@@ -89,22 +94,33 @@ export async function settWifiSSID(ssid) {
 
     console.log('characteristic', characteristic);
 
+    /*
     const value = await characteristic.readValue();		
 
     console.log('BEFORE ssid value:', arrayBufferToString(value));
+    */
 
     const arrayBuffer = stringToArrayBuffer(ssid);
 
-    const response = await characteristic.writeValue(arrayBuffer);
+    console.log('Write buffer', arrayBuffer);
 
-    console.log({response});
-
-    return response;
+    try {
+        const response = await characteristic.writeValue(arrayBuffer);
+        console.log({response});
+        return SUCCESSFUL;
+    } catch(error) {
+        console.error('Error setting wifi ssid', ssid, error);
+    }
+    
+    return UNSUCCESSFUL;
 }
 
-export async function settWifiPassword(password) {
+/**
+ * Returns a boolean for whether the write succeeded
+ */
+export async function setWifiPassword(password) {
 
-    console.log('setWifiPassword');
+    console.log('setWifiPassword', password);
 
     if (!server) {
         console.log('Server not established. Try to (re-)connect first.');
@@ -121,10 +137,16 @@ export async function settWifiPassword(password) {
 
     const arrayBuffer = stringToArrayBuffer(password);
 
-    const response = await characteristic.writeValue(arrayBuffer);
+    console.log('Write buffer', arrayBuffer);
 
-    console.log({response});
-
-    return response;
+    try {
+        const response = await characteristic.writeValue(arrayBuffer);
+        console.log({response});
+        return SUCCESSFUL;
+    } catch(error) {
+        console.error('Error setting wifi password', password, error);
+    }
+    
+    return UNSUCCESSFUL;
 
 }
