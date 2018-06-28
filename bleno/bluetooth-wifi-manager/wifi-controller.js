@@ -12,7 +12,7 @@ const wifiService = new WiFiServiceDiscovery();
 // TODO Remove this.
 var networkDetails = {
   ssid: 'srbackup',
-  password: 'xxxxxxxx',
+  password: '******',
   key_mgmt: 'WPA-PSK',
 
 };
@@ -20,7 +20,7 @@ var networkDetails = {
 
 var networkDetails2 = {
   ssid: 'srguest',
-  password: 'St3g1950',
+  password: '******',
   key_mgmt: 'WPA-PSK',
 };
 
@@ -435,6 +435,17 @@ WiFiServiceDiscovery.prototype.setSSID = function(ssid) {
   }
 };
 
+
+WiFiServiceDiscovery.prototype.stopWPAsupplicant = function() {
+	piWifi.killSupplicant('wlan0', function(err) {
+	  if (err) {
+		return console.error(err.message);
+	  }
+	  console.log('Supplicant process terminated!');
+	});	
+}
+
+
 /**
  * A simple method of the WiFiServiceDiscovery class to validate a password and update the member variable of the
  * WiFiServiceDiscovery object.
@@ -464,7 +475,7 @@ WiFiServiceDiscovery.prototype.checkPassword = function(ssid) {
   //console.log(result);
 //});
 
-piWifi.connectTo (networkDetails2, function(err) {
+piWifi.connectTo (networkDetails, function(err) {
   if(err) {
     console.log('Connection error: ' + err.message);
 

@@ -15,6 +15,16 @@ var NetworkCharacteristic = require('./wifi-networks-characteristic');
 
 console.log('bleno - Bluetooth WiFi Manager');
 
+const iShouldExit = true;			// Used to set the manager to handle closing down.
+
+process.on('SIGINT', function() {
+
+    if (iShouldExit)
+		console.log("\n\n\n***** BlueTooth Manager Closing down. Please wait... *****");
+		wifi.wifiService.stopWPAsupplicant();			// try and cleanly stop wpa_supplicant
+        process.exit();
+});
+
 wifi.wifiService.getStatus().then( (state) => {
   console.log(`WiFi -> stateChange: ${state}`);
 
