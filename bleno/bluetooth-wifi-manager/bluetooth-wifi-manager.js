@@ -8,7 +8,7 @@ const wifi = require('./wifi-controller');
 
 var BlenoPrimaryService = bleno.PrimaryService;
 
-var WifiSIDDCharacteristic = require('./wifi-ssid-characteristic');
+var WifiSSIDCharacteristic = require('./wifi-ssid-characteristic');
 var WiFiPasswordCharacteristic = require('./wifi-password-characteristic');
 var WiFiSecurityCharacteristic = require('./wifi-security-characteristic');
 var NetworkCharacteristic = require('./wifi-networks-characteristic');
@@ -50,7 +50,7 @@ wifi.wifiService.getStatus().then( (state) => {
       new BlenoPrimaryService({
         uuid: constants.WIFI_SETUP_SERVICE_UUID,
         characteristics: [
-          new WifiSIDDCharacteristic(),
+          new WifiSSIDCharacteristic(),
           new WiFiPasswordCharacteristic(),
           new WiFiSecurityCharacteristic(),
           new NetworkCharacteristic()
