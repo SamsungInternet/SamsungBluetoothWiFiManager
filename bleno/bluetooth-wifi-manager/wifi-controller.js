@@ -12,7 +12,7 @@ const wifiService = new WiFiServiceDiscovery();
 // TODO Remove this.
 var networkDetails = {
   ssid: 'srbackup',
-  password: '******',
+  password: '********',
   key_mgmt: 'WPA-PSK',
 
 };
@@ -365,7 +365,7 @@ function WiFiServiceDiscovery () {
  *
  */
 WiFiServiceDiscovery.prototype.getStatus = async function() {
-  let status = await getpiWifiStatus();
+  let status = await getpiWiFiStatus();
   this.networks = await getpiNetworkSSIDs();
   this.networksWPAconfig = await getpiWPAconfEntries();
   // Check if SSID is undefined
