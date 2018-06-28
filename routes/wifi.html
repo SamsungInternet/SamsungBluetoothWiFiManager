@@ -38,7 +38,11 @@
 	</p>
 
 	<p>
-		<input type="submit" id="submit" disabled={isInvalid} value="Submit"/>
+		{#if waiting}
+			<button id="submit" disabled><span class="loadingSpinner"></span></button>
+		{:else}
+			<button id="submit" disabled={isInvalid}>Submit</button>
+		{/if}
 	</p>
 </form>
 
@@ -51,7 +55,8 @@
 			data() {
 				return {
 					isInvalid: true,
-					error: false
+					error: false,
+					waiting: false
 				};
 			},
 			methods: {
@@ -71,6 +76,8 @@
 					console.log('on submit!');
 					event.preventDefault();
 
+					this.set({waiting: true});
+
 					let success = await Bluetooth.setWifiSSID(this.refs.wifissid.value);
 					
 					if (success) {
@@ -80,6 +87,10 @@
 					if (!success) {
 						this.set({error: true});
 					}
+					
+					this.set({waiting: false});
+
+					// TODO get IP address and redirect
 				}
 			}
 		};

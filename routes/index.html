@@ -84,6 +84,7 @@
 					.catch(error => {
 						console.error('Bluetooth connection error', error);
 						this.set({error: true});
+						this.set({connecting: false});
 					});
 
 			}
