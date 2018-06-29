@@ -29,7 +29,7 @@
 			methods: {
 				onClickContinue() {
 					const ipAddress = this.store.get().ipAddress;
-					const redirect = `http://${ipAddress}`;
+					const redirect = `https://${ipAddress}:4443`;
 					console.log('Redirecting to', redirect);
 					location.href = redirect;
 				}
