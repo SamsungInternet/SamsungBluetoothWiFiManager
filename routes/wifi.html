@@ -46,6 +46,8 @@
 	</p>
 </form>
 
+<p class="footer"><a href="/">Start again</a></p>
+
 <script>
 
 	import { goto } from 'sapper/runtime.js';
@@ -83,14 +85,26 @@
 					if (success) {
 						success = await Bluetooth.setWifiPassword(this.refs.wifipwd.value);
 					}
+					
+					if (success) {
+						const state = await Bluetooth.getNetworkState();
+						console.log('state', state);
+						console.log('status', state.status);
+						console.log('ipAddress', state.ipAddress);
+						this.store.set({ipAddress: state.ipAddress});
 
-					if (!success) {
+						success = state.status === Bluetooth.NETWORK_STATUS.COMPLETED;
+					}
+
+					if (success) {
+						console.log('COMPLETED');
+						goto('/redirect');
+
+					} else {
 						this.set({error: true});
 					}
 					
 					this.set({waiting: false});
-
-					// TODO get IP address and redirect
 				}
 			}
 		};

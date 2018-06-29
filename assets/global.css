@@ -123,6 +123,16 @@ button:disabled {
 	cursor: default;
 }
 
+.footer {
+	margin-top: 3rem;
+	font-size: 0.9em;
+	text-align: center;
+}
+
+.footer a {
+	color: #aaa;
+}
+
 @keyframes loadingSpinner {
     from { transform: rotate(0deg)   }
     to   { transform: rotate(360deg) }
