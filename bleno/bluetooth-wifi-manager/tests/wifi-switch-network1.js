@@ -4,10 +4,10 @@
 
 var piWifi = require('pi-wifi');
 const config = require('config');
-
+const wifiPassword = process.env.WIFIPASSWORD1 || 'unknown';
 var networkDetails = {
   ssid: 'srbackup',
-  password: '********',
+  password: wifiPassword,
   key_mgmt: 'WPA-PSK',
 
 };
@@ -17,7 +17,8 @@ var networkDetails = {
  * A simple test case that can be used to test connecting to network
  * described in networkDetails.
  * 
- * @run	/> nodejs wifi-switch-network1.js
+ * @run		/> export WIFIPASSWORD='your password'
+ * 			/> nodejs wifi-switch-network1.js
  * 
  * 
  */ 

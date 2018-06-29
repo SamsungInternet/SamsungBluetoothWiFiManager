@@ -10,66 +10,75 @@ var BlenoCharacteristic = bleno.Characteristic;
 const constants = require('./constants');
 
 
-var ActiveSSIDCharacteristic = function() {
-  ActiveSSIDCharacteristic.super_.call(this, {
-    uuid: constants.WIFI_SSID_UUID,
-    properties: ['read', 'write', 'notify'],
+var ActiveNetworkStateCharacteristic = function() {
+  ActiveNetworkStateCharacteristic.super_.call(this, {
+    uuid: constants.WIFI_NETWOKR_STATE_UUID,
+    properties: ['read', 'notify'],
     descriptors: [
       new bleno.Descriptor({
         uuid: '2901',
-        value: 'The current WiFi SSID name'
+        value: 'The current network state: e.g. CONNECTED, IP Address, DNS Name'
       })
     ],
     value: null
   });
 
   // we need to load our wifi SSID from the wifiService object when creating our bluetooth characteristic
-  this._value = new Buffer.from(wifi.wifiService.wifiSSID);
+  this._value = new Buffer.from(wifi.wifiService.wpaStatus);
+  this._value2 = new Buffer.from(wifi.wifiService.ip);
+  this._value3 = new Buffer.from('loclahost.local');
   this._updateValueCallback = null;
 };
 
 
-util.inherits(ActiveSSIDCharacteristic, BlenoCharacteristic);
+util.inherits(ActiveNetworkStateCharacteristic, BlenoCharacteristic);
 
 
-ActiveSSIDCharacteristic.prototype.onReadRequest = function(offset, callback) {
-  console.log('Active SSID Characteristic - onReadRequest: value = ' + wifi.wifiService.wifiSSID);
+ActiveNetworkStateCharacteristic.prototype.onReadRequest = function(offset, callback) {
+  var result = this.RESULT_SUCCESS;
+  console.log('Active Network State Characteristic - onReadRequest: value = ' + this._value + ' and value2 = ' + this._value2);
 
-  callback(this.RESULT_SUCCESS, this._value);
+  // Take our objects local variable _value and _value2 and pass into a buffer to be used by the bluetooth stack.
+  // _value should be our network state and _value2 should be our IP address.
+  let networkState = this._value + ',' + this._value2;
+  let data = new Buffer(networkState, 'utf-8');
+  // currently the bluetooth stack ingests about 22 octets at a time. if we have not ingested all our octets we should
+  // return success and take 22 away from the start of our buffer. The 'offset' value is the amount of octets we have
+  // already sent.
+  if (offset > data.length) {
+    result = this.RESULT_INVALID_OFFSET;
+  }  else {
+    data = data.slice(offset);
+  }
+
+  callback(result, data);
 };
 
 
-ActiveSSIDCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
+ActiveNetworkStateCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
   let result = this.RESULT_SUCCESS;
-  console.log('onWriteRequest SSID data -> ' + data);
 
-  if (wifi.wifiService.setSSID(data)) {
-    this._value = data;
-    console.log('Active SSID Characteristic - onWriteRequest: value = ' + this._value);
-  } else {
-    console.error('The SSID value is illegal. Tried setting: ' + data);
-    console.error('The HEX values of the illegal data look like: ' + Buffer.from(data, 'utf8').toString('hex'));
-    result = this.RESULT_UNLIKELY_ERROR;
-  }
+  console.log('onWriteRequest Network State data -> ' + data);
+  console.log('Nothing to be done....');
 
   if (this._updateValueCallback) {
-    console.log('Active SSID Characteristic - onWriteRequest: notifying');
+    console.log('Active Network State Characteristic - onWriteRequest: notifying');
     this._updateValueCallback(this._value);
   }
   callback(result);
 };
 
 
-ActiveSSIDCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
-  console.log('Active SSID Characteristic - onSubscribe');
+ActiveNetworkStateCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
+  console.log('Active Network State Characteristic - onSubscribe');
   this._updateValueCallback = updateValueCallback;
 };
 
 
-ActiveSSIDCharacteristic.prototype.onUnsubscribe = function() {
-  console.log('Active SSID Characteristic - onUnsubscribe');
+ActiveNetworkStateCharacteristic.prototype.onUnsubscribe = function() {
+  console.log('Active Network State Characteristic - onUnsubscribe');
   this._updateValueCallback = null;
 };
 
 
-module.exports = ActiveSSIDCharacteristic;
+module.exports = ActiveNetworkStateCharacteristic;
