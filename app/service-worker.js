@@ -72,7 +72,7 @@ self.addEventListener('fetch', event => {
 			.open(`offline${timestamp}`)
 			.then(async cache => {
 				try {
-					if (event.request.cache === 'only-if-cache') {
+					if (event.request.cache === 'only-if-cached') {
 						// workaround Chrome devtools bug https://github.com/sveltejs/sapper-template/issues/34
 						event.request.mode = 'same-origin';
 					}
