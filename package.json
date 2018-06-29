@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "sapper dev",
     "build": "sapper build",
-    "export": "sapper export",
+    "export": "sapper export && cp CNAME export/CNAME && touch export/.nojekyll",
     "start": "node build",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
