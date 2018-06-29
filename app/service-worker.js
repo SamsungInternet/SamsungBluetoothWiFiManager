@@ -7,11 +7,15 @@ const ASSETS = `cache${timestamp}`;
 const to_cache = shell.concat(assets);
 const cached = new Set(to_cache);
 
+// TEMP test to see if it fixes:
+// https://stackoverflow.com/questions/48828905/service-worker-typeerrorrequest-failed-at-anonymous
+const to_cache_fix = to_cache.map(resource => `./${resource}`);
+
 self.addEventListener('install', event => {
 	event.waitUntil(
 		caches
 			.open(ASSETS)
-			.then(cache => cache.addAll(to_cache))
+			.then(cache => cache.addAll(to_cache_fix))
 			.then(() => {
 				self.skipWaiting();
 			})
