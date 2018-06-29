@@ -30,7 +30,7 @@
     "mac": "unknown",
     "securityCharacteristic": "none",
     "securityList": [ "NONE", "WEP 128b ASCii", "WEP 128b Pasephrase", "LEAP", "WEP", "WPA2 Personal", "WPA2 Enterprise" ]
-  }
-
+  },
+  "intervalWiFiCheck":60,
 }
 

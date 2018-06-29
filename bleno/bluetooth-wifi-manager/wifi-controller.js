@@ -347,8 +347,8 @@ WiFiServiceDiscovery.prototype.getStatus = async function() {
   this.securityCharacteristic = status.key_mgmt;
   this.ip = status.ip;
   this.mac = status.mac;
-  this.wpaStatus = status.wpa_state;   // TODO This should only be active when we know we have a completed connection
-	return this.status;
+  this.wpaStatus = status.wpa_state;
+  return this.status;
 }
 
 WiFiServiceDiscovery.prototype.connect = async function(password) {	

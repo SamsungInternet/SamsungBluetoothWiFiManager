@@ -7,7 +7,7 @@ var bleno = require('bleno');
 const wifi = require('./wifi-controller');
 var BlenoCharacteristic = bleno.Characteristic;
 
-const constants = require('./constants');
+const constants = require('./config/constants');
 
 
 var ActiveNetworkStateCharacteristic = function() {
@@ -35,15 +35,15 @@ util.inherits(ActiveNetworkStateCharacteristic, BlenoCharacteristic);
 
 
 ActiveNetworkStateCharacteristic.prototype.onReadRequest = function(offset, callback) {
-  var result = this.RESULT_SUCCESS;	
+  var result = this.RESULT_SUCCESS;
   console.log('Active Network State Characteristic - onReadRequest: value = ' + this._value + ' and value2 = ' + this._value2);
-  
+
   // Take our objects local variable _value and _value2 and pass into a buffer to be used by the bluetooth stack.
   // _value should be our network state and _value2 should be our IP address.
   let networkState = this._value + ',' + this._value2;
   let data = new Buffer(networkState, 'utf-8');
-  // currently the bluetooth stack ingests about 22 octets at a time. if we have not ingested all our octets we should 
-  // return success and take 22 away from the start of our buffer. The 'offset' value is the amount of octets we have 
+  // currently the bluetooth stack ingests about 22 octets at a time. if we have not ingested all our octets we should
+  // return success and take 22 away from the start of our buffer. The 'offset' value is the amount of octets we have
   // already sent.
   if (offset > data.length) {
     result = this.RESULT_INVALID_OFFSET;
@@ -57,7 +57,7 @@ ActiveNetworkStateCharacteristic.prototype.onReadRequest = function(offset, call
 
 ActiveNetworkStateCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
   let result = this.RESULT_SUCCESS;
-    
+
   console.log('onWriteRequest Network State data -> ' + data);
   console.log('Nothing to be done....');
 

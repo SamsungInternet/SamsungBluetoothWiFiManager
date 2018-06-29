@@ -8,7 +8,7 @@ var bleno = require('bleno');
 const wifi = require('./wifi-controller');
 var BlenoCharacteristic = bleno.Characteristic;
 
-const constants = require('./constants');
+const constants = require('./config/constants');
 
 
 var WiFiSecurityCharacteristic = function() {
