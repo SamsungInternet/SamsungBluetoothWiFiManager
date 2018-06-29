@@ -1,4 +1,4 @@
-# Setup_Things_: A Web Application for initialising a Mozilla Things Gateway over Bluetooth
+# SetupThings: A Web Application for initialising a Mozilla Things Gateway over Bluetooth
 
 This is a web application that you can use to connect with a Things Gateway running
 the experimental [Samsung Bluetooth WiFi Manager](https://github.com/nherriot/SamsungBluetoothWiFiManager), in order to set the 
