@@ -4,10 +4,11 @@
 
 var piWifi = require('pi-wifi');
 const config = require('config');
+const wifiPassword = process.env.WIFI-PASSWORD2 || 'unknown';
 
 var networkDetails = {
   ssid: 'srguest',
-  password: '********',
+  password: wifiPassword,
   key_mgmt: 'WPA-PSK',
 };
 

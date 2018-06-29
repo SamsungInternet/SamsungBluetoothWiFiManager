@@ -4,10 +4,11 @@
 
 var piWifi = require('pi-wifi');
 const config = require('config');
+const wifiPassword = process.env.WIFI-PASSWORD3 || 'unknown';
 
 var networkDetails = {
   ssid: 'nicks-nexus',
-  password: '********',
+  password: wifiPassword,
   key_mgmt: 'WPA-PSK',
 };
 

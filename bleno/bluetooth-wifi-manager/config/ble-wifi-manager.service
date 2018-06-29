@@ -1,0 +1,11 @@
+[Service]
+WorkingDirectory=/home/pi/samsung/bleno
+ExecStart=node /home/pi/samsung/bleno/bluetooth-wifi-manager/bluetooth-wifi-manager.js
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=ble-wifi-manager
+User=root
+Group=root
+Environment=NODE_ENV=production
+[Install]
