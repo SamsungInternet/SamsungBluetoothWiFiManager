@@ -11,7 +11,8 @@ var BlenoPrimaryService = bleno.PrimaryService;
 var WifiSSIDCharacteristic = require('./wifi-ssid-characteristic');
 var WiFiPasswordCharacteristic = require('./wifi-password-characteristic');
 var WiFiSecurityCharacteristic = require('./wifi-security-characteristic');
-var NetworkCharacteristic = require('./wifi-networks-characteristic');
+var WiFiNetworkStateCharacteristic = require('./wifi-network-state-characteristic');
+var NetworCharacteristic = require('./wifi-networks-characteristic');
 
 console.log('bleno - Bluetooth WiFi Manager');
 
@@ -53,7 +54,8 @@ wifi.wifiService.getStatus().then( (state) => {
           new WifiSSIDCharacteristic(),
           new WiFiPasswordCharacteristic(),
           new WiFiSecurityCharacteristic(),
-          new NetworkCharacteristic()
+          new WiFiNetworkStateCharacteristic(),
+          new NetworCharacteristic()
         ]
       })
     ]);

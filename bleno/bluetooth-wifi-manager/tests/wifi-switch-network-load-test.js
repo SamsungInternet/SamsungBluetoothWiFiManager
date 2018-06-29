@@ -3,23 +3,27 @@
  */
 
 var piWifi = require('pi-wifi');
+const wifiPassword = process.env.WIFIPASSWORD || 'unknown';
+const wifiPassword2 = process.env.WIFIPASSWORD3 || 'unknown';
+const wifiPassword3 = process.env.WIFIPASSWORD3 || 'unknown';
+
 
 var networkDetails = {
   ssid: 'srbackup',
-  password: 'Tr3x1949',
+  password: wifiPassword,
   key_mgmt: 'WPA-PSK',
 };
 
 var networkDetails2 = {
   ssid: 'srguest',
-  password: 'St3g1950',
+  password: wifiPassword2,
   key_mgmt: 'WPA-PSK',
 
 };
 
 var networkDetails3 = {
   ssid: 'nicks-nexus',
-  password: 'gr00vtech0423',
+  password: wifiPassword3,
   key_mgmt: 'WPA-PSK',
 };
 
