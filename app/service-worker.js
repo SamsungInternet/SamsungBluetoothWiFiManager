@@ -11,6 +11,8 @@ const cached = new Set(to_cache);
 // https://stackoverflow.com/questions/48828905/service-worker-typeerrorrequest-failed-at-anonymous
 const to_cache_fix = to_cache.map(resource => `./${resource}`);
 
+console.log('to_cache_fix', to_cache_fix);
+
 self.addEventListener('install', event => {
 	event.waitUntil(
 		caches
