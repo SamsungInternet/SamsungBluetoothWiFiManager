@@ -7,6 +7,6 @@ This has been tested on Rasbian Stretch 2018 Version. On a fresh Rasbian Stretch
 
 * /> sudo apt-get install npm                             // Insalls Node pacakge management system.
 * /> mydir my-project                                     // Create your project directory
-* /> git clone                                            // Clone this repo to your directory
+* /> git clone https://github.com/nherriot/SamsungBluetoothWiFiManager.git    // Clone this repo to your directory
 * /> cd ~/my-project/SamsungBluetoothWiFiManager/bleno    // Move to the directory that contains the pacakges used for the system
 * /> npm install                                          // Use Node's package management system to install all needed node pacakges.
