@@ -44,6 +44,7 @@ Your system should now be up todate. If you want to install packages manually yo
 
 ## Starting The Program
 To start the bluetooth wifi manager go to the direcotry:
+
   /> cd /home/pi/my-project/SamsungBluetoothWiFiManager/bleno/bluetooth-wifi-manager
   /> node bluetooth-wifi-manager.js
   
