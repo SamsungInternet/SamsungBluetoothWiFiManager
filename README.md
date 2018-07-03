@@ -21,8 +21,9 @@ After the shell script is run you will have the latest version of node running o
 Then select the specific version you require.
 
 Once you have installed node you can check the version like this:
-      pi@raspberrypi:~/samsung $ node -v
-      v8.10.0
+     
+     />pi@raspberrypi:~/samsung $ node -v
+     v8.10.0
       
 At the time of writing version 8.10 was used. Once node is on your system you need to allow the node binary access to LCAP on your system. To set the permissions on the Raspberry Pi do:
 
