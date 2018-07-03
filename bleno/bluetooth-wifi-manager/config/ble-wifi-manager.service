@@ -10,6 +10,5 @@ thWiFi.log 2>&1
  #StandardOutput=/home/pi/samsung/bluetoothWiFi.log
  #StandardError=/home/pi/samsung/bluetoothWiFi.log
 
-
 [Install]
  WantedBy=multi-user.target
