@@ -16,9 +16,9 @@ https://github.com/audstanley/NodeJs-Raspberry-Pi
 
 Once you have installed node you can check the version like this:
       pi@raspberrypi:~/samsung $ node -v
-      v10.5.0
+      v8.10.0
       
-At the time of writing version 10 was used.
+At the time of writing version 8.10 was used.
 
 ### Required Software Components
 The underlying system depends on prerequisits for the bleno library. But to minimise context switchin we have placed the commands below:
