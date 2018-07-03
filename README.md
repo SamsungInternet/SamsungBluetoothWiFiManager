@@ -14,6 +14,12 @@ It is recommended you update your system with: /> sudo apt update
 The Raspberry Pi 0 comes with a very old version of node (4.8). To update to a more recent version we ran a bash script allowing you to easily upgarde. Instructions here:
 https://github.com/audstanley/NodeJs-Raspberry-Pi
 
+After the shell script is run you will have the latest version of node running on your system. To change to a specific version you can run:
+
+     /> sudo node-install -v 8.10
+     
+Then select the specific version you require.
+
 Once you have installed node you can check the version like this:
       pi@raspberrypi:~/samsung $ node -v
       v8.10.0
