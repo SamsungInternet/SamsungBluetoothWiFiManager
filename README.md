@@ -10,8 +10,8 @@ For this application we used the Raspberry Pi 3B and Raspberry Pi Zero W.
 The version of Rasbian used was Rasbian Stretch 2018-06-27
 It is recommended you update your system with: /> sudo apt update
 
-### Node Version
-The Raspberry Pi 0 comes with a very old version of node (4.8). To update to a more recent version we ran a bash script allowing you to easily upgarde. Instructions here:
+### Node Version and Node Package Manager
+The Raspberry Pi 0 comes with a very old version of node (4.8) and Node Package Manager (NPM). To update to a more recent version we ran a bash script written by audstanley.com ( Thank you Mr Audstanley! :-) ) allowing you to easily upgarde. Instructions here:
 https://github.com/audstanley/NodeJs-Raspberry-Pi
 
 After the shell script is run you will have the latest version of node running on your system. To change to a specific version you can run:
@@ -28,6 +28,23 @@ Once you have installed node you can check the version like this:
 At the time of writing version 8.10 was used. Once node is on your system you need to allow the node binary access to LCAP on your system. To set the permissions on the Raspberry Pi do:
 
      /> sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+
+Finally, the NPM system has to upgraded to a newer release. To do this use the command:
+
+     /> npm install -g npm
+     
+You need to do it in this order, since npm uses node. To check your version of NPM do:
+
+     /> npm -v
+     5.6.0
+     
+      ╭─────────────────────────────────────╮
+      │                                     │
+      │   Update available 5.6.0 → 6.1.0    │
+      │     Run npm i -g npm to update      │
+      │                                     │
+      ╰─────────────────────────────────────╯
+
 
 ### Required Software Components
 The underlying system depends on prerequisits for the bleno library. But to minimise context switchin we have placed the commands below:
