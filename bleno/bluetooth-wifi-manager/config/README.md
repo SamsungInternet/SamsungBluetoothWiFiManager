@@ -49,5 +49,5 @@ https://play.google.com/store/apps/details?id=com.punchthrough.lightblueexplorer
 
 Launch the application and scan for bluetooth devices. You should see a bluetooth device called 'IoT Gateway WiFi Setup'.
 
-![Alt text](../../../docs/Screenshot_lightblue.png?raw=true "Title")
+![Alt text](../../../docs/Screenshot_lightblue.png = 250x)
 
