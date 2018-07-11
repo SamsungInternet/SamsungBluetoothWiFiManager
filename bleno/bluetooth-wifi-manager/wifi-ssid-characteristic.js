@@ -24,7 +24,14 @@ var ActiveSSIDCharacteristic = function() {
   });
 
   // we need to load our wifi SSID from the wifiService object when creating our bluetooth characteristic
-  this._value = new Buffer.from(wifi.wifiService.wifiSSID);
+  console.log('ActiveSSIDCharacteristic is reading wifi SSID: ' +  wifi.wifiService.wifiSSID);
+  if (typeof wifi.wifiService.wifiSSID !=='undefined' && wifi.wifiService.wifiSSID !== null) {	  
+	this._value = new Buffer.from(wifi.wifiService.wifiSSID);
+  } else {
+	 this._value = new Buffer.from('not set');
+	 console.log('ActiveSSIDCharacteristic wifiSSID is being set to "not set". There is no active SSID at the moment.'); 
+  }	
+	
   this._updateValueCallback = null;
 };
 

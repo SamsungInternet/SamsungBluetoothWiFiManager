@@ -24,8 +24,15 @@ var ActiveNetworkStateCharacteristic = function() {
   });
 
   // we need to load our wifi SSID from the wifiService object when creating our bluetooth characteristic
+  console.log('ActiveNetworkStateCharacteristic states are: ' + wifi.wifiService.wpaStatus + " and the IP: " + wifi.wifiService.ip );
+  if (typeof wifi.wifiService.ip !=='undefined' && wifi.wifiService.ip !== null) {	  
+	this._value2 = new Buffer.from(wifi.wifiService.ip);
+  } else {
+	 this._value2 = new Buffer.from('127.0.0.1');
+	 console.log('ActiveNetworkStateCharacteristic wifiIP is being set to "127.0.0.1". There is no IP at the moment.'); 
+  }	
+  
   this._value = new Buffer.from(wifi.wifiService.wpaStatus);
-  this._value2 = new Buffer.from(wifi.wifiService.ip);
   this._value3 = new Buffer.from('loclahost.local');
   this._updateValueCallback = null;
 };
