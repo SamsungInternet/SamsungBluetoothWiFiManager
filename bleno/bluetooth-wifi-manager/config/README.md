@@ -18,9 +18,10 @@ Once the new service profile is copied into the 'unit' systemd directory you nee
      /> systemctl daemon-reload
 
 ## Start Your New Bluetooth WiFi Manager Service
-You can now start the service from the command line and check it's working. To Start the service do:
+You can now start the service from the command line and check it's working. First check the 'Status' and then 'Start' the service:
+First Check Status:
 
-     />  pi@raspberrypi:/etc/systemd/system $ sudo service bluetooth-wifi-manager status
+     />  sudo service bluetooth-wifi-manager status
      ● bluetooth-wifi-manager.service - Bluetooth WiFi Manager Service
        Loaded: loaded (/etc/systemd/system/bluetooth-wifi-manager.service; disabled; vendor preset: enabled)
        Active: inactive (dead)
@@ -49,5 +50,5 @@ https://play.google.com/store/apps/details?id=com.punchthrough.lightblueexplorer
 
 Launch the application and scan for bluetooth devices. You should see a bluetooth device called 'IoT Gateway WiFi Setup'.
 
-![Alt text](../../../docs/Screenshot_lightblue.png?raw=true "Title")
+![Alt text](../../../docs/Screenshot_lightblue.png)
 
