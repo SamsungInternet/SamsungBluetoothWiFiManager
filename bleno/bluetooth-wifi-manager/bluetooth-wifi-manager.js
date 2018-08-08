@@ -38,7 +38,7 @@ process.on('SIGINT', function() {
 
 /**
  * Our main loop. Before we start listening to bluetooth we need to scan and get the status of our WiFi networks. Hence wo make a synchronous
- * call to getStatus and continue when we not that is complete.
+ * call to getStatus and continue when we know that is complete.
  * We then listen on bluetooth events for 'poweredOn' and 'advertisingStart'. Once this has happened we can start listening to our Bluetooth GATT
  * characteristics.
  *
