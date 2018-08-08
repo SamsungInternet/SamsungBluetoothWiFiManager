@@ -348,7 +348,7 @@ WiFiServiceDiscovery.prototype.getStatus = async function() {
   this.ip = status.ip;
   this.mac = status.mac;
   this.wpaStatus = status.wpa_state;
-  return this.status;
+  return this.wpaStatus;
 }
 
 WiFiServiceDiscovery.prototype.connect = async function(password) {	
