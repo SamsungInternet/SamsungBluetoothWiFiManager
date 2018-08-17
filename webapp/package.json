@@ -1,0 +1,27 @@
+{
+  "name": "SetupThings",
+  "description": "Setup your Things Gateway",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "sapper dev",
+    "build": "sapper build",
+    "export": "sapper export && cp CNAME export/CNAME && touch export/.nojekyll",
+    "start": "node build",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open",
+    "test": "run-p --race dev cy:run",
+    "deploy": "git subtree push --prefix export origin gh-pages"
+  },
+  "dependencies": {
+    "compression": "^1.7.1",
+    "polka": "^0.3.4",
+    "sapper": "^0.13.5",
+    "serve-static": "^1.13.1"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.2",
+    "svelte": "^2.8.1",
+    "svelte-loader": "^2.9.0",
+    "webpack": "^4.12.2"
+  }
+}
