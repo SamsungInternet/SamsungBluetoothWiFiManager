@@ -1,5 +1,7 @@
 # SamsungBluetoothWiFiManager
+
 ![Main App Screenshot](docs/main-heading-design1.png)
+
 This is a node.js application that will allow WiFi configuration of a server. Designed to be used on Gateway devices or devices that need to be configured that may not have a UI to allow user configuration. Once the setup and installation is complete you will be able to take your device (mobile phone)and use it to control how your Raspberry Pi attaches to other WiFi networks without the use of a keyboard or mouse.
 
 The application will use a Bluetooth Low Energy peripheral connection to expose an interface to setup your WiFi.
