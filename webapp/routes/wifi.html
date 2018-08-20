@@ -1,0 +1,111 @@
+<svelte:head>
+	<title>Setup Things - Step 2</title>
+</svelte:head>
+
+<style>
+	#wifi-ssid {
+		width: 100%;
+	}
+	#submit {
+		width: 100%;
+	}
+</style>
+
+<h1><a href="/">Setup <strong>Things</strong> <img src="logo-light.svg" alt="Things logo" width="50" height="50"/></a></h1>
+
+<h2>Step 2</h2>
+
+{#if error}
+	<h3 class="error">There was a problem connecting to your Gateway. Please <a href="/">start again</a>.</h3>
+{/if}
+
+<p class="instruction">Your Wi-Fi details</p>
+
+<form on:submit="onSubmit(event)">
+	<p>
+		<label for="wifi-ssid">Wi-Fi name (SSID)</label>
+		<select id="wifi-ssid" ref:wifissid on:change="onWifiSSIDChange()">
+			<option value="" selected>Select...</option>
+			{#each $wifiSSIDs as wifiSSID}
+				<option value={wifiSSID}>{wifiSSID}</option>
+			{/each}
+		</select>
+	</p>
+
+	<p>
+		<label for="wifi-pwd">Wi-Fi password</label>
+		<input type="password" id="wifi-pwd" ref:wifipwd on:input="onWifiPwdChange()" on:change="onWifiPwdChange()"/>
+	</p>
+
+	<p>
+		{#if waiting}
+			<button id="submit" disabled><span class="loadingSpinner"></span></button>
+		{:else}
+			<button id="submit" disabled={isInvalid}>Submit</button>
+		{/if}
+	</p>
+</form>
+
+<p class="footer"><a href="/">Start again</a></p>
+
+<script>
+
+	import { goto } from 'sapper/runtime.js';
+	import * as Bluetooth from './_bluetooth/bluetooth.js';
+
+	export default {
+			data() {
+				return {
+					isInvalid: true,
+					error: false,
+					waiting: false
+				};
+			},
+			methods: {
+				getIsValid() {
+					console.log('getIsValid: this.refs', this.refs.wifipwd, this.refs.wifissid);
+					return !!this.refs.wifissid.value && !!this.refs.wifipwd.value;
+				},
+				onWifiSSIDChange() {
+					console.log('on wifi sssid change: this.refs', this.refs);
+					this.set({isInvalid: !this.getIsValid()});
+				},
+				onWifiPwdChange() {
+					console.log('on wifi pwd change: this.refs', this.refs);
+					this.set({isInvalid: !this.getIsValid()});
+				},
+				async onSubmit(event) {
+					console.log('on submit!');
+					event.preventDefault();
+
+					this.set({waiting: true});
+
+					let success = await Bluetooth.setWifiSSID(this.refs.wifissid.value);
+					
+					if (success) {
+						success = await Bluetooth.setWifiPassword(this.refs.wifipwd.value);
+					}
+					
+					if (success) {
+						const state = await Bluetooth.getNetworkState();
+						console.log('state', state);
+						console.log('status', state.status);
+						console.log('ipAddress', state.ipAddress);
+						this.store.set({ipAddress: state.ipAddress});
+
+						success = state.status === Bluetooth.NETWORK_STATUS.COMPLETED;
+					}
+
+					if (success) {
+						console.log('COMPLETED');
+						goto('/redirect');
+
+					} else {
+						this.set({error: true});
+					}
+					
+					this.set({waiting: false});
+				}
+			}
+		};
+</script>

@@ -1,0 +1,93 @@
+<svelte:head>
+	<title>Setup Things - Step 1</title>
+</svelte:head>
+
+<style>
+	#connect {
+		width: 100%;
+	}
+</style>
+
+<h1>Setup <strong>Things</strong> <img src="logo-light.svg" alt="Things logo" width="50" height="50"/></h1>
+
+{#if supported == false}
+	<h2>Sorry</h2>
+
+	<p>This service requires Web Bluetooth, which your browser does not support.</p>
+	<p>Please use an alternative setup method or try again in a 
+		<a href="https://caniuse.com/#feat=web-bluetooth">supporting browser</a> (such as Samsung Internet, Chrome or Opera).</p>
+
+{:elseif supported}
+
+	{#if error}
+		<h3 class="error">There was a problem connecting to your Gateway. Please try again.</h3>
+	{/if}
+
+	<h3>To setup your Gateway and configure it to use your wi-fi network, follow these steps.</h3>
+
+	<h2>Step 1</h2>
+
+	<p>Check your gateway is switched on and press the button to connect.</p>
+
+	{#if connecting}
+		<button id="connect" disabled><span class="loadingSpinner"></span></button>
+	{:else}
+		<button id="connect" on:click="onClickConnect()">Connect</button>
+	{/if}
+
+{/if}
+
+<script>
+
+	import { goto } from 'sapper/runtime.js';
+	import * as Bluetooth from './_bluetooth/bluetooth.js';
+
+	export default {
+		data() {
+			return {
+				supported: null,
+				error: false,
+				connecting: false
+			}
+		},
+		oncreate() {
+			this.set({supported: Bluetooth.isSupported()});
+		},
+		methods: {
+			onClickConnect() {
+
+				Bluetooth.getDevice()
+					.then(() => {
+						// User has chosen device, show loading spinner
+						this.set({connecting: true});
+						return Bluetooth.connect();
+					})
+					.then(() => {
+						return Bluetooth.getWifiSSIDs();
+					})
+					.then(wifiSSIDs => {
+
+						if (!wifiSSIDs) {
+							console.error('No wifi SSIDs returned', wifiSSIDs);
+							this.set({error: true});
+						} else {
+
+							console.log('Setting wifi SSIDs in Store:', wifiSSIDs);
+
+							this.store.set({wifiSSIDs: wifiSSIDs});
+
+							this.set({connecting: false});
+
+							goto('/wifi');
+						}
+					})
+					.catch(error => {
+						console.error('Bluetooth connection error', error);
+						this.set({error: true});
+						this.set({connecting: false});
+					});
+
+			}
+		}
+	};
+</script>

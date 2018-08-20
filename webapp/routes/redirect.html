@@ -1,0 +1,38 @@
+<svelte:head>
+	<title>Setup Things - Success</title>
+</svelte:head>
+
+<style>
+	#continue {
+		width: 100%;
+	}
+</style>
+
+<h1><a href="/">Setup <strong>Things</strong> <img src="logo-light.svg" alt="Things logo" width="50" height="50"/></a></h1>
+
+<h2>Success</h2>
+
+<p class="instruction">You will now be redirected to your Gateway. Please ensure that you are 
+	connected to your chosen wifi network and press Continue.
+</p>
+
+<button id="continue" on:click="onClickContinue()">Continue</button>
+
+<p class="footer"><a href="/">Start again</a></p>
+
+<script>
+
+	import { goto } from 'sapper/runtime.js';
+	import * as Bluetooth from './_bluetooth/bluetooth.js';
+
+	export default {
+			methods: {
+				onClickContinue() {
+					const ipAddress = this.store.get().ipAddress;
+					const redirect = `https://${ipAddress}:4443`;
+					console.log('Redirecting to', redirect);
+					location.href = redirect;
+				}
+			}
+		};
+</script>

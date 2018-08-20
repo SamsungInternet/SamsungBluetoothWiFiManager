@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="450" height="450" viewBox="0 0 450.00 450.00" enable-background="new 0 0 450.00 450.00" xml:space="preserve">
+	<ellipse fill="none" stroke-width="10" stroke-linejoin="round" stroke="#333333" stroke-opacity="1" cx="222.236" cy="239.501" rx="78" ry="78"/>
+	<path fill="none" stroke-width="10" stroke-linejoin="round" stroke="#333333" stroke-opacity="1" d="M 267.736,33.9999C 287.066,33.9999 302.736,49.6701 302.736,68.9999C 302.736,88.3299 287.066,104 267.736,104C 248.406,104 232.736,88.3299 232.736,68.9999C 232.736,49.6701 248.406,33.9999 267.736,33.9999 Z "/>
+	<path fill="none" stroke-width="10" stroke-linejoin="round" stroke="#333333" stroke-opacity="1" d="M 384.237,139.5C 403.566,139.5 419.237,155.17 419.237,174.5C 419.237,193.83 403.567,209.5 384.237,209.5C 364.907,209.5 349.237,193.83 349.237,174.5C 349.237,155.17 364.907,139.5 384.237,139.5 Z "/>
+	<path fill="none" stroke-width="10" stroke-linejoin="round" stroke="#333333" stroke-opacity="1" d="M 347.902,328.501C 367.232,328.501 382.902,344.171 382.902,363.501C 382.902,382.831 367.232,398.501 347.902,398.501C 328.572,398.501 312.902,382.831 312.902,363.501C 312.902,344.171 328.573,328.501 347.902,328.501 Z "/>
+	<path fill="none" stroke-width="10" stroke-linejoin="round" stroke="#333333" stroke-opacity="1" d="M 80.4994,310.663C 99.8292,310.663 115.499,326.333 115.499,345.663C 115.499,364.993 99.8294,380.663 80.4994,380.663C 61.1694,380.663 45.4994,364.993 45.4994,345.663C 45.4994,326.333 61.1695,310.663 80.4994,310.663 Z "/>
+	<path fill="none" stroke-width="10" stroke-linejoin="round" stroke="#333333" stroke-opacity="1" d="M 67,115.673C 86.3298,115.673 102,131.343 102,150.673C 102,170.003 86.33,185.673 67,185.673C 47.67,185.673 32,170.003 32,150.673C 32,131.343 47.6701,115.673 67,115.673 Z "/>
+	<line fill="none" stroke-width="10" stroke-linejoin="round" stroke="#333333" stroke-opacity="1" x1="243.241" y1="164.172" x2="259.74" y2="102.675"/>
+	<line fill="none" stroke-width="10" stroke-linejoin="round" stroke="#333333" stroke-opacity="1" x1="292.275" y1="210.104" x2="351.699" y2="187.238"/>
+	<line fill="none" stroke-width="10" stroke-linejoin="round" stroke="#333333" stroke-opacity="1" x1="107.675" y1="324.461" x2="158.319" y2="285.87"/>
+	<line fill="none" stroke-width="10" stroke-linejoin="round" stroke="#333333" stroke-opacity="1" x1="324.442" y1="335.434" x2="274.535" y2="295.895"/>
+	<line fill="none" stroke-width="10" stroke-linejoin="round" stroke="#333333" stroke-opacity="1" x1="153.843" y1="198.163" x2="97.1508" y2="169.18"/>
+</svg>
