@@ -111,7 +111,7 @@ e.g. 'The current WiFi SSID name'
 2) Check the log output from your terminal window if you have not started using the bluetooth-wifi-manager.service e.g.
 
 
-     /> node bluetooth-wifi-manager.js 
+     ```/> node bluetooth-wifi-manager.js 
         bleno - Bluetooth WiFi Manager
         *** Scan Current WiFi network complete -> Status: srbackup
         { bssid: '*****************',
@@ -131,7 +131,7 @@ e.g. 'The current WiFi SSID name'
         *** Scan WiFi config complete *** 
         WiFi -> stateChange: COMPLETED
         on -> stateChange: poweredOn
-        on -> advertisingStart: success
+        on -> advertisingStart: success```
 	
 3) From the Light Blue	Android application view the current WiFi SSID. i.e. 'READ' the GATT characteristic. You should see the log output from your terminal
 window look something like this:
