@@ -38,6 +38,11 @@ util.inherits(NetworkCharacteristic, BlenoCharacteristic);
 NetworkCharacteristic.prototype.onReadRequest = function(offset, callback) {
   var result = this.RESULT_SUCCESS;
 
+  if (this._value != wifi.wifiService.networks) {
+    console.log('WARNING! NetworkCharacteristic state is: ' + this._value + ' but the wifi manager has it as: ' + wifi.wifiService.networks + ' updating BLE values');
+    this._value = wifi.wifiService.networks;
+  }
+
   // Take our objects local variable _value and pass into a buffer to be used by the bluetooth stack. _value should be our list of network SSID values
   var data = new Buffer(this._value, 'utf-8');
   // currently the bluetooth stack ingests about 22 octets at a time. if we have not ingested all our octets we should return success and take 22 away from
