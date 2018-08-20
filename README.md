@@ -48,7 +48,7 @@ You need to do it in this order, since npm uses node. To check your version of N
 
 
 ### Required Software Components
-The underlying system depends on prerequisits for the bleno library. But to minimise context switchin we have placed the commands below:
+The underlying system depends on prerequisits for the bleno library. But to minimise context switching we have placed the commands below:
 
      /> sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev build-essential
 
