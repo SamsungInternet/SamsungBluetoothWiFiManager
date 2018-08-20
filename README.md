@@ -137,7 +137,7 @@ e.g. 'The current WiFi SSID name'
 window look something like this:
 
 
-	/> Active SSID Characteristic - onReadRequest: value = s******p
+	```/> Active SSID Characteristic - onReadRequest: value = s******p ```
 	
 Congratulations the embedded application is running and working. To interact with the application using the PWA	app by going to the 
 secure URL https://things.samsunginter.net
