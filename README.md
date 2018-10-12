@@ -151,11 +151,11 @@ Currently the bluetooth wifi manager will have a bluetooth service name of: **'I
 This is hard codded at present and was named this as it was intended to be used with the Mozilla WoT Gateway.
 However, you can change this to a name of your choice. To change the name of the service go to the file:
 
-	```./bluetooth-wifi-manager/config/constants.js```
+    ```./bluetooth-wifi-manager/config/constants.js```
 
 And now update the constant:
 
-	```12 : const BLUETOOTH_SERVICE_NAME = 'IoT Gateway WiFi Setup';```
+    ```12 : const BLUETOOTH_SERVICE_NAME = 'IoT Gateway WiFi Setup';```
 
 When you start the device now it will have this name.
 
