@@ -35,7 +35,7 @@ At the time of writing version 8.10 was used. Once node is on your system you ne
 
 Finally, the NPM system has to upgraded to a newer release. To do this use the command:
 
-     /> npm install -g npm
+     /> sudo npm install -g npm
      
 You need to do it in this order, since npm uses node. To check your version of NPM do:
 
