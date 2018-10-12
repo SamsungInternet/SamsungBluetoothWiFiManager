@@ -7,19 +7,20 @@ https://www.linux.com/learn/understanding-and-using-systemd
 The Samsung Bluetooth WiFi Manager has a service configuration script which can be used to setup your system to do this. Follow the installation and setup steps below.
 
 ## Copy Your Service Profile
-You need to copy the service profile script to the /etc/systemd/system dir as an admin (root) user:
+You need to copy the service profile script to the /etc/systemd/system dir as an admin (root) user, hence from the root folder of this project in a terminal type:
 
-     /> sudo cp config/bluetooth-wifi-manager.service /etc/systemd/system/
+     /> cd bleno/bluetooth-wifi-manager/config/
+     /> sudo cp bluetooth-wifi-manager.service /etc/systemd/system/
      
 ## Enable Your New Service
-Once the new service profile is copied into the 'unit' systemd directory you need to set permissions on the file and enable it. To do this do:
+Once the new service profile is copied into the 'unit' systemd directory you need to set permissions on the file and enable it. To do this do from a terminal type:
 
      /> sudo chmod 664 /etc/systemd/system/bluetooth-wifi-manager.service
      /> systemctl daemon-reload
 
 ## Start Your New Bluetooth WiFi Manager Service
 You can now start the service from the command line and check it's working. First check the 'Status' and then 'Start' the service:
-First Check Status:
+First Check Status, from the command line type:
 
      />  sudo service bluetooth-wifi-manager status
      ● bluetooth-wifi-manager.service - Bluetooth WiFi Manager Service
@@ -29,7 +30,7 @@ First Check Status:
      Jul ** 11:13:26 raspberrypi systemd[1]: Stopping Bluetooth WiFi Manager Service...
      Jul ** 11:13:26 raspberrypi systemd[1]: Stopped Bluetooth WiFi Manager Service.
 
-To Start the service you can do:
+To Start the service you can type the following from the command line:
 
      /> sudo service bluetooth-wifi-manager start
      
