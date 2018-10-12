@@ -161,4 +161,4 @@ When you start the device now it will have this name.
 
 ## Starting As A Service
 
-To start the system as a Linux Systemd service [navigate here](https://github.com/nherriot/SamsungBluetoothWiFiManager/tree/master/bleno/bluetooth-wifi-manager/config
+To start the system as a Linux Systemd service [navigate here](https://github.com/nherriot/SamsungBluetoothWiFiManager/tree/master/bleno/bluetooth-wifi-manager/config)
