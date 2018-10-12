@@ -22,7 +22,7 @@ After the shell script is run you will have the latest version of node running o
 
      /> sudo node-install -v 8.10
      
-Then select the specific version you require.
+Then select the specific version you require. At the time of writing this was option 21 to install version 8.10
 
 Once you have installed node you can check the version like this:
      
