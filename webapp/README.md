@@ -52,3 +52,23 @@ When you make changes, the site should be re-built automatically.
 
 The Sapper docs include guides for [deploying](https://sapper.svelte.technology/guide#deploying) and [exporting a static version of the site](https://sapper.svelte.technology/guide#exporting).
 
+## Remote Debugging
+
+Using the web app on a mobile phone is often useful, for example for cross-device testing and especially if you do not have Web Bluetooth capable browser on your laptop. To debug the web app on your phone, from your laptop, you can use Remote Debugging:
+
+* Ensure that 'USB debugging' is enabled on your phone.
+* Connect your phone to your laptop via USB.
+* Switch the USB mode from 'charging' to 'file transfer' or 'media transfer'.
+* In Chrome / Chromium on your laptop, visit the URL `chrome://inspect`.
+* Your phone and its active pages should be displayed there.
+* Click 'Inspect' on the appropriate page to launch the Dev Tools for it.
+* You should be able to debug it now as though it was a page you were viewing locally in the browser on your laptop (for example, view the console).
+
+See the [Chrome DevTools guide](https://developers.google.com/web/tools/chrome-devtools/) for more information.
+
+The instructions above are suitable for accessing a deployed version of the website that you can access via a domain name. To access the local, development version running on your computer, you can also:
+
+* Enable 'port forwarding' in the `chrome://inspect` settings, to forward your local development server's port (e.g. 3000).
+* Then visit `localhost:[port number]` (e.g. `localhost:3000`) on your phone.
+
+This is important for testing Web Bluetooth, because `localhost` counts as a secure origin, which means that Web Bluetooth is supported. Web Bluetooth will not be supported if you simply visit a local IP address via `http://` .
