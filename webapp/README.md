@@ -64,7 +64,7 @@ Using the web app on a mobile phone is often useful, for example for cross-devic
 * Click 'Inspect' on the appropriate page to launch the Dev Tools for it.
 * You should be able to debug it now as though it was a page you were viewing locally in the browser on your laptop (for example, view the console).
 
-See the [Chrome DevTools guide](https://developers.google.com/web/tools/chrome-devtools/?utm_source=dcc&utm_medium=redirect&utm_campaign=2018Q2) for more information.
+See the [Chrome DevTools guide](https://developers.google.com/web/tools/chrome-devtools/) for more information.
 
 The instructions above are suitable for accessing a deployed version of the website that you can access via a domain name. To access the local, development version running on your computer, you can also:
 
