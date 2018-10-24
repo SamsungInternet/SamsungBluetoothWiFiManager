@@ -243,8 +243,8 @@ function getpiNetworkSSIDs () {
           //console.log(networks[i].ssid);
           networkSidds.add(networks[i].ssid);
         }
-        //console.log('*** Captured SSIDs networks:');
-        //for (let item of networkSidds) console.log(item);
+        console.log('*** Captured SSIDs networks:');
+        for (let item of networkSidds) console.log(item);
         resolve(networkSidds);
       }
     });
@@ -348,7 +348,8 @@ WiFiServiceDiscovery.prototype.getStatus = async function() {
   this.ip = status.ip;
   this.mac = status.mac;
   this.wpaStatus = status.wpa_state;
-  return this.status;
+  //this.wpaStatus = 'SCANNING';
+  return this.wpaStatus;
 }
 
 WiFiServiceDiscovery.prototype.connect = async function(password) {	
@@ -358,8 +359,8 @@ WiFiServiceDiscovery.prototype.connect = async function(password) {
     // report this as a true success. So call the getpiWiFiStatus method first.    
     let connectionStatus = await getpiWiFiStatus();
     
-    console.log('WiFiServiceDiscovery.connect -> connectionStatus is: ');
-	console.log(connectionStatus);
+    console.log('WiFiServiceDiscovery.connect -> connectionStatus details below... ');
+	  console.log(connectionStatus);
 
     this.wifiSSID = connectionStatus.ssid;
     this.securityCharacteristic = connectionStatus.key_mgmt;
@@ -370,22 +371,22 @@ WiFiServiceDiscovery.prototype.connect = async function(password) {
     // If we got a success back from wpa_supplicant that a connection is being established but the wpa_state is 'DISCONNECTED' 
     // or 'SCANNING' then we should wait a few sec's and get state again. if that fails then return with a result containg a 'FAILED' status.
     if (connectionStatus.wpa_state == 'DISCONNECTED' | connectionStatus.wpa_state == 'SCANNING' | connectionStatus.wpa_state == 'ASSOCIATING') {
-		// Try again to get our network state and delay for some time
-		console.log('WiFiServiceDiscovery.connect -> Setting a delay and then querry if the connection is established ');
-		let connectionStatusDelayed = await getpiWiFiStatusDelay(10);				// TODO Make the timeout configurable
-		console.log('WiFiServiceDiscovery.connect -> connectionStatus is: ');
-		console.log(connectionStatusDelayed);
+      // Try again to get our network state and delay for some time
+      console.log('WiFiServiceDiscovery.connect -> Setting a delay and then query if the connection is established ');
+      let connectionStatusDelayed = await getpiWiFiStatusDelay(10);				// TODO Make the timeout configurable
+      console.log('WiFiServiceDiscovery.connect -> connectionStatus details below...: ');
+      console.log(connectionStatusDelayed);
 
-		this.wifiSSID = connectionStatusDelayed.ssid;
-		this.securityCharacteristic = connectionStatusDelayed.key_mgmt;
-		this.ip = connectionStatusDelayed.ip;
-		this.mac = connectionStatusDelayed.mac;
-		this.wpaStatus = connectionStatusDelayed.wpa_state;
-		if (!connectionStatusDelayed.wpa_state == 'COMPLETED'){
-			status = 'Failed';
-			console.error('WiFiServiceDiscovery.connect attempted to connect to a new WiFi Network but failed');
-		}
-	}
+      this.wifiSSID = connectionStatusDelayed.ssid;
+      this.securityCharacteristic = connectionStatusDelayed.key_mgmt;
+      this.ip = connectionStatusDelayed.ip;
+      this.mac = connectionStatusDelayed.mac;
+      this.wpaStatus = connectionStatusDelayed.wpa_state;
+      if (connectionStatusDelayed.wpa_state != 'COMPLETED'){
+        status = 'Failed';
+        console.error('WiFiServiceDiscovery.connect attempted to connect to a new WiFi Network but failed');
+      }
+	  }
   }
   return {status: status, ipAddress: this.ip};
 }
