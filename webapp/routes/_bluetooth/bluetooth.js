@@ -75,7 +75,7 @@ export async function getWifiSSIDs() {
 
         const string = arrayBufferToString(value.buffer);
 
-        const ssids = string.split(' ');
+        const ssids = string.split(',');
     
         console.log('ssids', ssids);
     
