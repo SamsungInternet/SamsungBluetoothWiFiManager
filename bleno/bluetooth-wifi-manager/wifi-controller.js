@@ -243,8 +243,8 @@ function getpiNetworkSSIDs () {
           //console.log(networks[i].ssid);
           networkSidds.add(networks[i].ssid);
         }
-        //console.log('*** Captured SSIDs networks:');
-        //for (let item of networkSidds) console.log(item);
+        console.log('*** Captured SSIDs networks:');
+        for (let item of networkSidds) console.log(item);
         resolve(networkSidds);
       }
     });

@@ -24,7 +24,7 @@ var NetworkCharacteristic = function() {
     value: null
   });
 
-  let networksArray = Array.from(wifi.wifiService.networks).join(' ');
+  let networksArray = Array.from(wifi.wifiService.networks).join(',');
   console.log('wifi networks characteristics network array is: ' + networksArray);
   this._value = new Buffer.from(networksArray);
   this._updateValueCallback = null;
@@ -38,13 +38,21 @@ util.inherits(NetworkCharacteristic, BlenoCharacteristic);
 NetworkCharacteristic.prototype.onReadRequest = function(offset, callback) {
   var result = this.RESULT_SUCCESS;
 
-  if (this._value != wifi.wifiService.networks) {
-    console.log('WARNING! NetworkCharacteristic state is: ' + this._value + ' but the wifi manager has it as: ' + wifi.wifiService.networks + ' updating BLE values');
-    this._value = wifi.wifiService.networks;
+  // wifi manager stores network SSID's as a set to stop duplicate entries. so we need to convert back to an Array before comparing with our stale buffer value
+  // in our _value variable.
+  var networksArray = Array.from(wifi.wifiService.networks).join(',');
+  console.log('NetworkCharacteristic onReadRequest - typeof _value is:' + typeof this._value);
+  console.log('NetworkCharacteristic onReadRequest - typeof networksArray is:' + typeof networksArray);
+
+  if (this._value != networksArray) {
+    console.log('WARNING! NetworkCharacteristic state is: ' + this._value + ' but the wifi manager has it as: ' + networksArray + ' updating BLE values');
+    this._value = networksArray;
   }
 
   // Take our objects local variable _value and pass into a buffer to be used by the bluetooth stack. _value should be our list of network SSID values
-  var data = new Buffer(this._value, 'utf-8');
+  var data = new Buffer(this._value.toString('hex'), 'utf-8');
+  console.log('Network Characteristic - data buffer is: ' + data);
+  console.log('Network Characteristic - data length is: ' + data.length);
   // currently the bluetooth stack ingests about 22 octets at a time. if we have not ingested all our octets we should return success and take 22 away from
   // the start of our buffer. The 'offset' value is the amount of octets we have already sent.
   if (offset > data.length) {
