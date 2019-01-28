@@ -1,0 +1,85 @@
+# This file will connect to our pwa-server as pwa_server_cms user and install all the required
+# packages. It will also clone the software from git onto the machine. It then installs software
+# required by the pwa node server and starts the starts it.
+
+# **** Prerequisite ****
+# 1) You need to have run the setup-users.yml script
+# /> ansible-playbook setup-users-encrypted.yml
+
+---
+- hosts: pwa-server
+  user: '{{adminuser}}'
+
+  vars_files:
+  - ../vars/project_variables_no_passwords.yml
+
+  tasks:
+  # Install node version manager
+  - name: Install Node Verion Manager (nvm)
+    shell: >
+      curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+    args:
+      creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
+  # Install Node Version required for the application
+  - name: install correct version of node
+    command: bash -c '. ~/.nvm/nvm.sh; nvm install {{node_version}}'
+
+  # Set Node Version to be the new installed version
+  - name: make nvm use the correct version of node
+    command: bash -c '. ~/.nvm/nvm.sh; nvm use {{node_version}}'
+
+  # Set nvm to version 8 on this machine
+  - name: set default node version
+    #sudo: yes
+    #sudo_user: ""
+    command: bash -c '. ~/.nvm/nvm.sh; nvm alias default {{node_version}}'
+
+  # Create our Samsung directory
+  - name: Creates directory
+    file:
+      path: '{{root_dir}}'
+      state: directory
+
+  # likewise we can install all packages we need from git by taking our build straight from the production branch
+  - name: Clone project from git branch 'master'
+    git:
+      repo={{production_git_repo}}
+      dest={{root_dir}}
+      remote=origin version={{git_branch}}
+
+  # Install project dependencies
+  - name: Install project dependancies
+    command: bash -c '. ~/.nvm/nvm.sh; npm install'
+    args:
+      chdir: '{{root_dir}}/{{project_dir}}'
+
+  # Install the node 'forever' app that allows scripts to run continuously
+  - name: Install 'Forever' node app to run scripts continously
+    command: bash -c '. ~/.nvm/nvm.sh; npm install forever'
+    args:
+      chdir: '{{root_dir}}/{{project_dir}}'
+
+  # Create a PWA build
+  - name: Create a PWA build in a build directory
+    command: bash -c '. ~/.nvm/nvm.sh; npm run build'
+    args:
+      chdir: '{{root_dir}}/{{project_dir}}'
+
+  # This will check the list of node.js app's running in the background. Remember using forever is a hack
+  - name: Check list of Node.js apps running.
+    command: bash -c '. ~/.nvm/nvm.sh; ./node_modules/forever/bin/forever list'
+    args:
+      chdir: '{{root_dir}}/{{project_dir}}'
+    register: forever_list
+    changed_when: false
+
+  # This will start our PWA application Node.JS server. From the command line we normally use /> npm run build
+  - name: Start progressive webb application using  Node.js app
+    command: bash -c '. ~/.nvm/nvm.sh; ./node_modules/forever/bin/forever start build/index.js'
+    when: "forever_list.stdout.find('/home/pwa_server_admin/samsung/webapp/build/index.js') == -1"  #TODO make this a dynamic variable - not hard coded
+    args:
+      chdir: '{{root_dir}}/{{project_dir}}'
+
+
+

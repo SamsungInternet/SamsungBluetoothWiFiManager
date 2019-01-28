@@ -1,0 +1,13 @@
+# Ansible Project Variables
+
+local_ssh_public_keys: ~/.ssh/id_rsa.pub					# This tells our playbook files where to get your ssh public key from
+ssh_port: 22												# If we set this variable our setup.yml file will use it to configure
+# the remote servers SSH port
+
+rootuser: 'root'
+
+# Set the admin and cms user names with passwords.
+adminuser: 'pwa_server_admin'
+adminpassword: 'change me'
+cmsuser: 'pwa_server_cms'
+cmspassword: 'change me'
