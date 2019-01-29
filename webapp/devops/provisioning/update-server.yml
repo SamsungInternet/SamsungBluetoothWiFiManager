@@ -53,7 +53,7 @@
 
   # This will start our PWA application Node.JS server. From the command line we normally use /> npm run build
   - name: Start progressive webb application using  Node.js app
-    command: bash -c '. ~/.nvm/nvm.sh; ./node_modules/forever/bin/forever start build/index.js'
+    command: bash -c '. ~/.nvm/nvm.sh; PORT={{port}} authbind --deep ./node_modules/forever/bin/forever start build/index.js'
     when: "forever_list.stdout.find('/home/pwa_server_admin/samsung/webapp/build/index.js') == -1"  #TODO make this a dynamic variable - not hard coded
     args:
       chdir: '{{root_dir}}/{{project_dir}}'
