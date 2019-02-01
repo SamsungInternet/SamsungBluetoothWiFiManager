@@ -14,7 +14,9 @@
   - ../vars/project_variables_no_passwords.yml
 
   tasks:
-  #TODO setup authbind to allow us to run on port 80 or use nginx for production system
+  #TODO install nginx to make this installed from the start.
+  #TODO populate nginx files to map to the node.js server running on 8080
+  #TODO setup letsencrypt so that HTTPS works out the box
 
   # Install node version manager
   - name: Install Node Verion Manager (nvm)
