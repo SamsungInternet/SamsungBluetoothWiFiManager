@@ -15,7 +15,7 @@
   "dependencies": {
     "compression": "^1.7.1",
     "polka": "^0.3.4",
-    "sapper": "^0.13.5",
+    "sapper": "^0.25.0",
     "serve-static": "^1.13.1"
   },
   "devDependencies": {
