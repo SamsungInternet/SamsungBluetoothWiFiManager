@@ -1,0 +1,35 @@
+# This file will connect to our pwa-server as pwa_server_cms user and start the pwa server
+# automatically. It checks to see that it is not running first.
+
+# **** Prerequisite ****
+# 1) You need to have run the setup-users.yml script i.e.
+#    /> ansible-playbook setup-users-encrypted.yml
+# 2) You need to have run the setup-server.yml script i.e.
+#    /> ansible-playbook setup-server.yml
+
+---
+- hosts: pwa-server
+  user: '{{adminuser}}'
+
+  vars_files:
+  - ../vars/project_variables_no_passwords.yml
+
+  tasks:
+
+  # This will check the list of node.js app's running in the background. Remember using forever is a hack
+  - name: Check list of Node.js apps running.
+    command: bash -c '. ~/.nvm/nvm.sh; ./node_modules/forever/bin/forever list'
+    args:
+      chdir: '{{root_dir}}/{{project_dir}}'
+    register: forever_list
+    changed_when: true
+
+  # This will start our PWA application Node.JS server. From the command line we normally use /> npm run build
+  - name: Stop progressive webb application using  Node.js app
+    command: bash -c '. ~/.nvm/nvm.sh; ./node_modules/forever/bin/forever stop build/index.js'
+    when: "forever_list.stdout.find('/home/pwa_server_admin/samsung/webapp/build/index.js') == -1"  #TODO make this a dynamic variable - not hard coded
+    args:
+      chdir: '{{root_dir}}/{{project_dir}}'
+
+
+

@@ -1,0 +1,101 @@
+# This file will connect to a remote server called pwa-server (taken from your hosts file) and  will add users
+# 'admin' and 'cms', their passwords and directory structures. It then adds your public key on your host computer and
+# copy for those users to the remote computer. The adminuser is added to the list of sudoers. It then setups up the bashrc
+# script for your users and has a task to setup the SSH server to stop root access. This part is not active at the time of
+# writing. The passwords are encrypted via ansible-vault and held in the /vars/protected_vars.yml file
+
+# **** Prerequisite ****
+# 1) You need to have a root user setup on your remote server
+# 2) The SSH private key on your local machine must be copied to the root user account on the
+#	 remote machine. e.g. />  ssh-copy-id root@104.236.14.12
+# 3) You need to have your 'hosts' and 'ansible.cfg' file in the same folder you run this file from
+# 4) You need to know the password of the 'protected_vars.yml' file which is used to provide encrypted
+#	 data for password variables in the script.
+
+
+---
+- hosts: pwa-server
+  user: '{{rootuser}}'
+
+  vars_files:
+  - ../vars/project_variables_no_passwords.yml
+  - ../vars/protected_vars.yml
+
+  handlers:
+  - name: Restart ssh
+    service: name=ssh state=restarted
+
+
+  tasks:
+  # Add our admin and cms user to the system
+  - name: Setup | create user noisy atom admin and noisy atom cms on your remote machine
+    command: useradd -m {{ item }} creates=/home/{{ item }}
+    become: true
+    become_method: sudo
+    with_items:
+      - '{{adminuser}}'
+      - '{{cmsuser}}'
+
+  # Setup passwords for users 'adminuser' and 'cmsuser' on the remote server
+  - name: Setup | set passwords for admin user and cms user
+    shell: usermod -p $(echo '{{ item.createpassword }}' | openssl passwd -1 -stdin) {{ item.createuser }}
+    become: true
+    become_method: sudo
+    with_items:
+      - { createpassword: '{{adminpassword}}', createuser: '{{adminuser}}' }
+      - { createpassword: '{{cmspassword}}', createuser: '{{cmsuser}}' }
+
+  # Add our admin user to the 'sudo' group so that he may have sudo privillages
+  - name: Add our adminuser to the 'sudo' group
+    user: name={{ adminuser }} comment="Deploy User" groups="sudo,admin,{{ adminuser }}"
+    become: true
+
+  # Setup an public key for this remote machine by copying the public key of this machine to the remote machine.
+  # We need to have our id_rsa.pub file within your home folder.
+  - name: Setup authorized key upload for adminuser and cmsuser
+    authorized_key: user={{ item }}
+      key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      path='/home/{{ item }}/.ssh/authorized_keys'
+      manage_dir=no
+    become: true
+    with_items:
+      - '{{adminuser}}'
+      - '{{cmsuser}}'
+
+  # Add our admin user to the 'sudo' users file and allow them to not require passwords for sudo access.
+  - name: Add Sudoers | update sudoers file and validate
+    lineinfile: "dest=/etc/sudoers
+      insertafter=EOF
+      line='{{ adminuser }} ALL=(ALL) NOPASSWD: ALL'
+      regexp='{{ adminuser }} ALL=(ALL) NOPASSWD: ALL'
+      state=present"
+    become: true
+
+  # Since this could be on a fresh Digital Ocean Machine we should ensure we setup a proper bash shell! And not that crap
+  # shell you normally get with no arrow up or tab complet commands. So lets do that for both users.
+  - name: Setup a bash shell for both users
+    shell: sudo usermod -s /bin/bash {{ item }}
+    become: true
+    become_method: sudo
+    with_items:
+      - '{{adminuser}}'
+      - '{{cmsuser}}'
+
+  # We need to stop a user loging in with root access via SSH. Someone could brute force attack our server on our root
+  # accont
+  #- name: Disallow root SSH access
+  #  lineinfile: dest=/etc/ssh/sshd_config
+  #            regexp="^PermitRootLogin"
+  #            line="PermitRootLogin no"
+  #            state=present
+  #  notify: Restart ssh
+
+
+  # if we have a variable setup in our vars directory to change our default SSH port it will change it otherwise it will
+  # leave the SSH port at 22
+#  - name: Change ssh port if we have configured it in our vars directory.
+#    lineinfile: dest=/etc/ssh/sshd_config
+#      regexp="^Port\s"
+#      line="Port {{ ssh_port }}"
+#      state=present
+#    notify: Restart ssh
