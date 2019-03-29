@@ -1,0 +1,17 @@
+[Unit]
+ Description=Bluetooth WiFi Manager Service
+ After=multi-user.target
+
+[Service]
+ Type=idle
+ WorkingDirectory=/home/pi/samsung/SamsungBluetoothWiFiManager/bleno/bluetooth-wifi-manager
+ ExecStart=/usr/bin/node /home/pi/samsung/SamsungBluetoothWiFiManager/bleno/bluetooth-wifi-manager/bluetooth-wifi-manager.js >> /home/pi/samsung/bluetooth-WiFi-manager.log 2>&1
+ RestartSec=30
+ Restart=on-failure
+ StandardOutput=syslog
+ SyslogIdentifier=ble_wifi_manager
+ StandardError=/home/pi/samsung/bluetoothWiFi.log
+
+
+[Install]
+ WantedBy=multi-user.target
