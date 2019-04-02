@@ -2,13 +2,13 @@
 
 ![Main App Screenshot](docs/main-heading-design1.png)
 
-This is a node.js application that will allow WiFi configuration of a server. Designed to be used on Gateway devices or devices that need to be configured that may not have a UI to allow user configuration. Once the setup and installation is complete you will be able to take your device (mobile phone)and use it to control how your Raspberry Pi attaches to other WiFi networks without the use of a keyboard or mouse.
+This is a node.js application that will allow WiFi configuration of an IoT device. Designed to be used on Gateway devices or devices that need to be configured that may not have a User Interface (UI) to allow user configuration. Once the setup and installation is complete you will be able to take your mobile phon and use it to control how your Raspberry Pi attaches to other WiFi networks. This is usefull when your device does not have the use of a keyboard or mouse.
 
-The application will use a Bluetooth Low Energy peripheral connection to expose an interface to setup your WiFi.
+The application will use a Bluetooth Low Energy (BLE) peripheral connection to expose an interface to setup your WiFi.
 
 
 ## Prerequisits
-For this application we used the Raspberry Pi 3B and Raspberry Pi Zero W.
+For this application we used and tested with the Raspberry Pi 3B and Raspberry Pi Zero W.
 
 ### Operating System
 The version of Rasbian used was Rasbian Stretch 2018-06-27
@@ -51,7 +51,7 @@ You need to do it in this order, since npm uses node. To check your version of N
 
 
 ### Required Software Components
-The underlying system depends on prerequisits for the bleno library. But to minimise context switching we have placed the commands below:
+The underlying system depends on prerequisits for the bleno library to work. But to minimise context switching we have placed the commands below:
 
      /> sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev build-essential
 
@@ -68,14 +68,18 @@ progressive web application (PWA) which is used to control the embedded device.
 On a fresh Rasbian Stretch image do:
 
      /> mkdir samsung                                        // Create your project directory
-     /> git clone https://github.com/nherriot/SamsungBluetoothWiFiManager.git    // Clone this repo to your directory
+     /> git clone https://github.com/SamsungInternet/SamsungBluetoothWiFiManager.git    // Clone this repo to your directory
      /> cd ~/my-project/SamsungBluetoothWiFiManager/bleno    // Move to the directory that contains the pacakges used for the system
      /> npm install                                          // Use Node's package management system to install all needed node pacakges.
 
-Your system should now be up to date. If you want to install packages manually you will need the 'bleno' and 'pi-wifi' npm packages:
+This will install the need packages from the package.json file which are bleno, config, node-wifi and pi-wifi. The application heavily uses the bleno library and I have copied the /examples directory directly into the application for people who may want to experiment and use from the examples created by sandeepmistry. 
 
-     /> npm install bleno 
-     
+Your system should now be up to date. 
+If you want to install packages manually you will need the 'bleno', node-wifi, config and 'pi-wifi' npm packages:
+
+     /> npm install bleno
+     /> npm install config
+     /> npm install node-wifi
      /> npm install pi-wifi
 
 ### Starting The Program From Command Line
@@ -100,8 +104,11 @@ To start the bluetooth wifi manager go to the directory:
 
 
 ## Setup Bluetooth Progressive Web Application
-To easily control your bluetooth wifi manager you need to access the Bluetooth Progressive Web Application (PWA) built for the system. You can access the PWA
-app by navigating to the secure URL on your mobile browser https://things.samsunginter.net - however to deploy the application directly and setup on your own static or dynamic web
+To easily control your bluetooth wifi manager you need to access the Bluetooth Progressive Web Application (PWA) built for the system. You can access the PWA by navigating to the secure URL on your mobile browser https://thingsdemo.samsunginter.net - 
+On your mobile it should look something like this:
+![Screenshot of SetupThings](docs/screenshot1.png)
+
+To deploy the application directly and setup on your own static or dynamic web
 server [navigate here](https://github.com/nherriot/SamsungBluetoothWiFiManager/tree/master/webapp)
 
 
@@ -143,7 +150,7 @@ window look something like this:
 	```/> Active SSID Characteristic - onReadRequest: value = s******p ```
 	
 Congratulations the embedded application is running and working. To interact with the application using the PWA	app by going to the 
-secure URL https://things.samsunginter.net
+secure URL https://thingsdemo.samsunginter.net
 
 ## Configuration
 
