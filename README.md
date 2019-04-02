@@ -106,7 +106,7 @@ To start the bluetooth wifi manager go to the directory:
 ## Setup Bluetooth Progressive Web Application
 To easily control your bluetooth wifi manager you need to access the Bluetooth Progressive Web Application (PWA) built for the system. You can access the PWA by navigating to the secure URL on your mobile browser https://thingsdemo.samsunginter.net - 
 On your mobile it should look something like this:
-![Screenshot of SetupThings](docs/screenshot1.png)
+![Screenshot of SetupThings](webapp/docs/screenshot1.png)
 
 To deploy the application directly and setup on your own static or dynamic web
 server [navigate here](https://github.com/nherriot/SamsungBluetoothWiFiManager/tree/master/webapp)
