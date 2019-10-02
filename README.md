@@ -2,7 +2,7 @@
 
 ![Main App Screenshot](docs/main-heading-design1.png)
 
-This is a node.js application that will allow WiFi configuration of an IoT device. Designed to be used on Gateway devices or devices that need to be configured that may not have a User Interface (UI) to allow user configuration. Once the setup and installation is complete you will be able to take your mobile phon and use it to control how your Raspberry Pi attaches to other WiFi networks. This is usefull when your device does not have the use of a keyboard or mouse.
+This is a node.js application that will allow WiFi configuration of an IoT device. Designed to be used on Gateway devices or devices that need to be configured that may not have a User Interface (UI) to allow user configuration. Once the setup and installation is complete you will be able to take your mobile phone and use it to control how your Raspberry Pi attaches to other WiFi networks. This is usefull when your device does not have the use of a keyboard or mouse.
 
 The application will use a Bluetooth Low Energy (BLE) peripheral connection to expose an interface to setup your WiFi.
 
