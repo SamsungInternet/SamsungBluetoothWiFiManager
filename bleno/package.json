@@ -9,7 +9,7 @@
   "dependencies": {
     "bleno": "^0.5.0",
     "config": "^1.30.0",
-    "node-wifi": "^2.0.4",
+    "node-wifi": "^2.0.12",
     "pi-wifi": "^1.2.0"
   },
   "devDependencies": {},
