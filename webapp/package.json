@@ -15,13 +15,13 @@
   "dependencies": {
     "compression": "^1.7.1",
     "polka": "^0.3.4",
-    "sapper": "^0.25.0",
+    "sapper": "^0.29.3",
     "serve-static": "^1.13.1"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.2",
-    "svelte": "^2.8.1",
+    "svelte": "^3.17.3",
     "svelte-loader": "^2.9.0",
-    "webpack": "^4.12.2"
+    "webpack": "^5.73.0"
   }
 }
